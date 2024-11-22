@@ -9,7 +9,7 @@ import EventDetails from "../pages/events/EventDetails";
 import Reports from "../pages/reports/Reports";
 import ReportDetails from "../pages/reports/ReportDetails";
 import Subscription from "../pages/subscriptions/Subscription";
-import ItemDetails from "../pages/Items/ItemDetails";
+import ItemDetails from "../pages/items/ItemDetails";
 import Settings from "../pages/settings/Settings";
 
 
