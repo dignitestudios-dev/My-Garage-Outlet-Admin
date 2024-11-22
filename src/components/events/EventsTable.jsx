@@ -219,7 +219,7 @@
           {currentEvents.map((event) => (
            <motion.div
            key={event.id}
-           className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 p-6 rounded-lg shadow-lg relative hover:scale-105 transform transition-all duration-300"
+           className="bg-gray-900 bg-opacity-50 border border-gray-700 p-6 rounded-lg shadow-lg relative hover:scale-105 transform transition-all duration-300"
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            transition={{ duration: 0.3 }}
@@ -253,7 +253,7 @@
              </button>
              <button
                onClick={() => toggleSelectEvent(event.id)}  // Toggles event selection
-               className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${selectedEvents.has(event.id) ? "text-[#EF1C68] bg-blue-200 hover:bg-blue-300" : "text-gray-300 hover:bg-gray-700"}`}
+               className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${selectedEvents.has(event.id) ? "text-white black bg-gray-700" : "text-white hover:bg-gray-700"}`}
              >
                {selectedEvents.has(event.id) ? <FaCheckCircle size={20} /> : <FaCheck size={20} />}
              </button>

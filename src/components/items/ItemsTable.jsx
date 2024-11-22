@@ -224,7 +224,7 @@ const ItemsTable = () => {
         {currentItems.map((item) => (
           <motion.div
             key={item.id}
-            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 rounded-lg shadow-lg p-4 flex flex-col items-center text-center"
+            className="bg-gray-900 bg-opacity-50  border border-gray-700 rounded-lg shadow-lg p-4 flex flex-col items-center text-center relative hover:scale-105 transform transition-all duration-300"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
@@ -253,8 +253,8 @@ const ItemsTable = () => {
                 onClick={() => toggleSelectItem(item.id)}
                 className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${
                   selectedItems.has(item.id)
-                    ? "text-[#EF1C68] bg-blue-200 hover:bg-blue-300"
-                    : "text-gray-300 hover:bg-gray-700"
+                    ? "text-white black bg-gray-700"
+                    : "text-white hover:bg-gray-700"
                 }`}
               >
                 {selectedItems.has(item.id) ? (
