@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
+
 const eventData = [
   { 
     id: 1, 
@@ -83,7 +84,7 @@ const DashboardItemsTable = () => {
 
         <button
           onClick={handleSeeAll}
-          className="ml-auto px-4 py-2 bg-[#EF1C68] text-white text-sm font-semibold rounded-full hover:bg-[#EF1C68] transition-colors"
+          className="ml-auto px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 text-white text-sm font-semibold rounded-full"
         >
           See All
         </button>
@@ -101,7 +102,7 @@ const DashboardItemsTable = () => {
         {currentItems.map((item) => (
           <motion.div
             key={item.id}
-            className="bg-[#1A293D] shadow-lg rounded-xl p-4 w-64 flex-shrink-0 relative transform transition-all duration-300 hover:scale-105 text-center"
+            className="bg-gray-900 bg-opacity-50 backdrop-blur-md  border border-gray-700 shadow-lg rounded-xl p-4 w-64 flex-shrink-0 relative text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
@@ -120,7 +121,7 @@ const DashboardItemsTable = () => {
 
             <button
               onClick={() => handleViewDetails(item.id)}
-              className="px-4 py-2 bg-[#EF1C68] text-white font-semibold rounded-full hover:bg-[#EF1C68] transition"
+              className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 text-white font-semibold rounded-full"
             >
               View Details
             </button>

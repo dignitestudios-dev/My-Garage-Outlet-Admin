@@ -177,7 +177,7 @@ const ItemsTable = () => {
       <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
         <button
           onClick={() => filterByDateRange("all")}
-          className={`px-4 py-2 rounded-lg ${dateFilter === "all" ? "bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white" : "bg-gray-800 text-white"}`}
+          className={`px-4 py-2 rounded-lg ${dateFilter === "all" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"}`}
         >
           All Items
         </button>
@@ -224,7 +224,7 @@ const ItemsTable = () => {
         {currentItems.map((item) => (
           <motion.div
             key={item.id}
-            className="bg-[#1A293D] rounded-lg shadow-lg p-4 flex flex-col items-center text-center"
+            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 rounded-lg shadow-lg p-4 flex flex-col items-center text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
@@ -244,8 +244,8 @@ const ItemsTable = () => {
             <div className="flex items-center justify-between w-full">
               <button
                 onClick={() => handleViewDetails(item.id)}
-                className="px-4 py-2 bg-[#EF1C68] text-white font-semibold rounded-full hover:bg-[#EF1C68] transition"
-              >
+                className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-[#EF1C68] transition"
+                >
                 View Details
               </button>
 

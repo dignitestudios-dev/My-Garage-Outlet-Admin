@@ -190,7 +190,7 @@
             key={filter}
             onClick={() => filterByDateRange(filter)}
             className={`px-4 py-2 mb-2 rounded-lg transition-colors duration-300 ${
-              activeFilter === filter ? "bg-gradient-to-r from-[#EF1C68] text-white" : "bg-gray-800 text-white hover:bg-gradient-to-r from-[#EF1C68]"
+              activeFilter === filter ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"
             }`}
           >
             {filter === "recent" && "Recently Created"}
@@ -219,7 +219,7 @@
           {currentEvents.map((event) => (
            <motion.div
            key={event.id}
-           className="bg-[#1A293D] p-6 rounded-lg shadow-lg relative hover:scale-105 transform transition-all duration-300"
+           className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 p-6 rounded-lg shadow-lg relative hover:scale-105 transform transition-all duration-300"
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            transition={{ duration: 0.3 }}
@@ -247,7 +247,7 @@
            <div className="flex items-center justify-between mt-4">
              <button
                onClick={() => navigate(`/event-details/${event.id}`)}
-               className="px-4 py-2 bg-[#EF1C68] text-white font-semibold rounded-full hover:bg-[#EF1C68] transition"
+               className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-[#EF1C68] transition"
              >
                View Details
              </button>

@@ -97,7 +97,7 @@ const DashboardEvents = () => {
         {/* Moving See All Button to the right of the header */}
         <button
           onClick={handleSeeAll}
-          className="ml-auto px-4 py-2 bg-[#EF1C68] text-white text-sm font-semibold rounded-full hover:bg-[#EF1C68] transition-colors"
+          className="ml-auto px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 text-white text-sm font-semibold rounded-full transition-colors"
         >
           See All
         </button>
@@ -116,7 +116,7 @@ const DashboardEvents = () => {
         {currentEvents.map((event) => (
           <motion.div
             key={event.id}
-            className="bg-[#1A293D] shadow-lg rounded-xl p-4 w-64 flex-shrink-0 relative transform transition-all duration-300 hover:scale-105 text-center"
+            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 shadow-lg rounded-xl p-4 w-64 flex-shrink-0 relative transform transition-all duration-300 text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
@@ -150,7 +150,7 @@ const DashboardEvents = () => {
             {/* View Details Button */}
             <button
               onClick={() => handleViewDetails(event.id)}
-              className="mt-4 px-5 py-2 bg-[#EF1C68] text-white text-sm font-semibold rounded-full hover:bg-[#EF1C68] transition-colors"
+              className="mt-4 px-5 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white text-sm font-semibold rounded-md"
             >
               View Details
             </button>

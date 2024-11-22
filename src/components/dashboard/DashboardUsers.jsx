@@ -44,7 +44,7 @@ const DashboardUsers = () => {
         </div>
         <button
           onClick={handleSeeAll}
-          className="px-4 py-2 bg-[#EF1C68] text-white text-sm font-semibold rounded-full hover:bg-[#EF1C68] transition-colors ml-auto"
+          className="ml-auto px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 text-white text-sm font-semibold rounded-full transition-colors"
         >
           See All
         </button>
@@ -62,7 +62,7 @@ const DashboardUsers = () => {
         {currentUsers.map((user) => (
           <motion.div
             key={user.id}
-            className="bg-[#1A293D] shadow-lg rounded-xl p-4 w-64 sm:w-72 md:w-1/4 lg:w-1/5 xl:w-1/5 flex-shrink-0 relative transform transition-all duration-300 hover:scale-105 text-center items-center"
+            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700  shadow-lg rounded-xl p-4 w-64 sm:w-72 md:w-1/4 lg:w-1/5 xl:w-1/5 flex-shrink-0 relative transform transition-all duration-300 text-center items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
@@ -87,18 +87,11 @@ const DashboardUsers = () => {
               >
                 {user.subscriber === "Subscribed" ? "Subscribed" : "Not Subscribed"}
               </span>
-              {/* <span
-                className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${
-                  user.status === "Active" ? "bg-green-700 text-green-100" : "bg-gray-600 text-gray-100"
-                }`}
-              >
-                {user.status === "Active" ? "Active" : "Inactive"}
-              </span> */}
             </div>
 
             <button
               onClick={() => handleEdit(user.id)}
-              className="mt-4 px-5 py-2 bg-[#EF1C68] text-white text-sm font-semibold rounded-full hover:bg-[#EF1C68] transition-colors"
+              className="mt-4 px-5 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700  text-white text-sm font-semibold rounded-md"
             >
               View Details
             </button>
