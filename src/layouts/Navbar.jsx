@@ -42,7 +42,7 @@ const Navbar = () => {
             </p>
             <p
               className="text-[11px] font-medium text-white hover:text-[#EF1C68] transition-all"
-              onClick={() => navigate("/profile", "Profile")}
+              onClick={() => navigate("/settings", "Profile")}
             >
               Admin
             </p>
