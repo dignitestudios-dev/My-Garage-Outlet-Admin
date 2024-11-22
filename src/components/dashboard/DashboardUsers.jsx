@@ -17,8 +17,8 @@ const userData = [
 
 const DashboardUsers = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const usersPerPage = 8; 
-  const usersPerPageMobile = 1; 
+  const usersPerPage = 8;
+  const usersPerPageMobile = 1;
   const navigate = useNavigate();
 
   const currentUsers = userData.slice(currentPage * usersPerPage, (currentPage + 1) * usersPerPage);
@@ -50,26 +50,28 @@ const DashboardUsers = () => {
         </button>
       </div>
 
+      {/* Swipeable area */}
       <motion.div
-        className="relative flex overflow-x-auto gap-8 pb-6 flex-nowrap hide-scrollbar lg:w-[1150px]"
+        className="relative flex overflow-x-auto gap-8 pb-6 flex-nowrap w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        drag="x" 
-        dragConstraints={{ left: 0, right: 0 }} 
-        dragElastic={0.1} 
+        drag="x"
+        dragConstraints={{ left: -200, right: 200 }}  // Adjusted constraints for flexibility
+        dragElastic={0.3}  // Increased elasticity for smoother swiping
+        dragMomentum={false}  // Prevents momentum after swipe ends
       >
         {currentUsers.map((user) => (
           <motion.div
             key={user.id}
-            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700  shadow-lg rounded-xl p-4 w-64 sm:w-72 md:w-1/4 lg:w-1/5 xl:w-1/5 flex-shrink-0 relative transform transition-all duration-300 text-center items-center"
+            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 shadow-lg rounded-xl p-4 w-64 sm:w-72 md:w-1/4 lg:w-1/5 xl:w-1/5 flex-shrink-0 relative transform transition-all duration-300 text-center items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
             <div className="h-20 w-20 bg-gray-500 rounded-full overflow-hidden mx-auto mb-4">
               <img
-                src={`https://i.pravatar.cc/150?u=${user.id}`} 
+                src={`https://i.pravatar.cc/150?u=${user.id}`}
                 alt={`${user.name}'s avatar`}
                 className="object-cover w-full h-full"
               />
