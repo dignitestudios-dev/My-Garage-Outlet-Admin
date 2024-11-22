@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const eventData = [
   { 
@@ -61,7 +61,6 @@ const DashboardItemsTable = () => {
   const navigate = useNavigate();
 
   const totalPages = Math.ceil(eventData.length / itemsPerPage);
-
   const currentItems = eventData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   const handleViewDetails = (itemId) => {
@@ -90,27 +89,16 @@ const DashboardItemsTable = () => {
         </button>
       </div>
 
-      <motion.div
-         className="relative flex overflow-x-auto gap-8 pb-6 flex-nowrap hide-scrollbar lg:w-[1150px]"
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         transition={{ delay: 0.2 }}
-         drag="x" 
-         dragConstraints={{ left: 0, right: 0 }} 
-         dragElastic={0.1} 
-      >
+      <div className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto">
         {currentItems.map((item) => (
-          <motion.div
+          <div
             key={item.id}
-            className="bg-gray-900 bg-opacity-50 backdrop-blur-md  border border-gray-700 shadow-lg rounded-xl p-4 w-64 flex-shrink-0 relative text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
+            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 shadow-lg rounded-xl p-4 w-64 flex-shrink-0 relative text-center"
           >
             <div className="h-40 w-full bg-gray-200 rounded-lg mb-4">
               <img
-                src={`${item.image}`}
-                alt={`${item.name}`}
+                src={item.image}
+                alt={item.name}
                 className="object-cover w-full h-full rounded-lg"
               />
             </div>
@@ -122,14 +110,12 @@ const DashboardItemsTable = () => {
             <button
               onClick={() => handleViewDetails(item.id)}
               className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
-              >
+            >
               View Details
             </button>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
-
-      
+      </div>
     </motion.div>
   );
 };

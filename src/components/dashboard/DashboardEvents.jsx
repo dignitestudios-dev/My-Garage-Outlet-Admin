@@ -105,13 +105,10 @@ const DashboardEvents = () => {
 
       {/* Horizontal Card Slider */}
       <motion.div
-         className="relative flex overflow-x-auto gap-8 pb-6 flex-nowrap hide-scrollbar lg:w-[1150px]"
+         className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto lg:w-[1150px]"
          initial={{ opacity: 0 }}
          animate={{ opacity: 1 }}
          transition={{ delay: 0.2 }}
-         drag="x" 
-         dragConstraints={{ left: 0, right: 0 }} 
-         dragElastic={0.1} 
       >
         {currentEvents.map((event) => (
           <motion.div
@@ -151,7 +148,7 @@ const DashboardEvents = () => {
             <button
               onClick={() => handleViewDetails(event.id)}
               className="mt-4 px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
-              >
+            >
               View Details
             </button>
           </motion.div>
