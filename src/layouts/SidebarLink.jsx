@@ -43,7 +43,7 @@ const SidebarLink = ({ link, onCloseDrawer }) => {
               onClick={() => handleNavigation(sublink.url, sublink.title)}
               className={`block w-full h-[46px] outline-none rounded-[12px] 
               bg-transparent text-white/50 
-              font-medium flex items-center justify-start transition-all duration-500 hover:bg-[#EF1C68] hover:text-white px-3 gap-2`}
+              font-medium flex items-center justify-start transition-all duration-500 hover:bg-gray-900 hover:text-white px-3 gap-2`}
             >
               <span className="capitalize text-sm">{sublink.title}</span>
             </button>

@@ -201,7 +201,7 @@ const ReportsTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.date}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button
-                    className="text-[#EF1C68] hover:text-[#EF1C68] mr-2"
+                    className="text-white mr-2"
                     onClick={() => handleEdit(report.id)}
                   >
                     <AiFillEdit size={18} />

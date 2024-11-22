@@ -244,7 +244,7 @@ const ItemsTable = () => {
             <div className="flex items-center justify-between w-full">
               <button
                 onClick={() => handleViewDetails(item.id)}
-                className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-[#EF1C68] transition"
+                className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
                 >
                 View Details
               </button>
