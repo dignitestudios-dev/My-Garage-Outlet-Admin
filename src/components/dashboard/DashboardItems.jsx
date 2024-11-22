@@ -89,7 +89,7 @@ const DashboardItemsTable = () => {
         </button>
       </div>
 
-      <div className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto">
+      <div className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto lg:w-[1150px]">
         {currentItems.map((item) => (
           <div
             key={item.id}

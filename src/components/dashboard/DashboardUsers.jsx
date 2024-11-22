@@ -50,11 +50,11 @@ const DashboardUsers = () => {
         </button>
       </div>
 
-      <div className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto">
+      <div className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto lg:w-[1150px]">
         {currentUsers.map((user) => (
           <div
             key={user.id}
-            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 shadow-lg rounded-xl p-4 w-64 sm:w-72 md:w-1/4 lg:w-1/5 xl:w-1/5 flex-shrink-0 relative transform transition-all duration-300 text-center items-center"
+            className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 shadow-lg rounded-xl p-4 w-64 sm:w-72 md:w-1/4 xl:w-1/5 flex-shrink-0 relative transform transition-all duration-300 text-center items-center "
           >
             <div className="h-20 w-20 bg-gray-500 rounded-full overflow-hidden mx-auto mb-4">
               <img
