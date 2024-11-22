@@ -80,7 +80,7 @@ const DashboardUsers = () => {
 
             <button
               onClick={() => handleEdit(user.id)}
-              className="mt-4 px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-[#EF1C68] transition"
+              className="mt-4 px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
             >
               View Details
             </button>
