@@ -101,7 +101,7 @@ const DashboardItemsTable = () => {
       transition={{ delay: 0.2 }}
     >
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">ITEMS</h2>
+        <h2 className="text-xl font-semibold text-gray-100">Items </h2>
 
         <button
           onClick={handleSeeAll}
