@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -59,6 +59,8 @@ const DashboardItemsTable = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8; 
   const navigate = useNavigate();
+  const scrollContainerRef = useRef(null); // Reference for the scroll container
+
 
   const totalPages = Math.ceil(eventData.length / itemsPerPage);
   const currentItems = eventData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
@@ -70,6 +72,26 @@ const DashboardItemsTable = () => {
   const handleSeeAll = () => {
     navigate("/items"); 
   };
+
+ // Function to handle mouse drag scroll
+ const handleMouseDown = (e) => {
+  const startX = e.clientX;
+  const scrollLeft = scrollContainerRef.current.scrollLeft;
+  
+
+  const onMouseMove = (moveEvent) => {
+    const distance = moveEvent.clientX - startX;
+    scrollContainerRef.current.scrollLeft = scrollLeft - distance;
+  };
+
+  const onMouseUp = () => {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+  };
+
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
+};
 
   return (
     <motion.div
@@ -89,8 +111,11 @@ const DashboardItemsTable = () => {
         </button>
       </div>
 
-      <div className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto lg:w-[1150px]">
-        {currentItems.map((item) => (
+      <div
+        ref={scrollContainerRef}
+        className="relative flex gap-8 pb-6 flex-nowrap overflow-x-auto hide-scrollbar lg:w-[1150px] w-full"
+        onMouseDown={handleMouseDown} // Listen for mouse down to initiate drag
+      >        {currentItems.map((item) => (
           <div
             key={item.id}
             className="bg-gray-900 bg-opacity-50 backdrop-blur-md border border-gray-700 shadow-lg rounded-xl p-4 w-64 flex-shrink-0 relative text-center"

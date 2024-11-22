@@ -1,68 +1,68 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 // Sample event data
 const eventData = [
   { 
-      id: 1, 
-      name: "New Event", 
-      email: "john@example.com", 
-      participants: "10", 
-      date: "2024-11-12", 
-      createdAt: "2024-10-15", 
-      status: "Upcoming", 
-      image: "https://images.pexels.com/photos/1181401/pexels-photo-1181401.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    id: 1, 
+    name: "New Event", 
+    email: "john@example.com", 
+    participants: "10", 
+    date: "2024-11-12", 
+    createdAt: "2024-10-15", 
+    status: "Upcoming", 
+    image: "https://images.pexels.com/photos/1181401/pexels-photo-1181401.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   { 
-      id: 2, 
-      name: "New Event 1", 
-      email: "jane@example.com", 
-      participants: "20", 
-      date: "2024-12-04", 
-      createdAt: "2024-11-05", 
-      status: "Completed", 
-      image: "https://images.pexels.com/photos/1034664/pexels-photo-1034664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    id: 2, 
+    name: "New Event 1", 
+    email: "jane@example.com", 
+    participants: "20", 
+    date: "2024-12-04", 
+    createdAt: "2024-11-05", 
+    status: "Completed", 
+    image: "https://images.pexels.com/photos/1034664/pexels-photo-1034664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   { 
-      id: 3, 
-      name: "New Event 2", 
-      email: "bob@example.com", 
-      participants: "30", 
-      date: "2024-12-10", 
-      createdAt: "2024-11-10", 
-      status: "Upcoming", 
-      image: "https://images.pexels.com/photos/3199829/pexels-photo-3199829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    id: 3, 
+    name: "New Event 2", 
+    email: "bob@example.com", 
+    participants: "30", 
+    date: "2024-12-10", 
+    createdAt: "2024-11-10", 
+    status: "Upcoming", 
+    image: "https://images.pexels.com/photos/3199829/pexels-photo-3199829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   { 
-      id: 4, 
-      name: "New Event 3", 
-      email: "alice@example.com", 
-      participants: "40", 
-      date: "2024-12-15", 
-      createdAt: "2024-11-11", 
-      status: "Upcoming", 
-      image: "https://images.pexels.com/photos/1300467/pexels-photo-1300467.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    id: 4, 
+    name: "New Event 3", 
+    email: "alice@example.com", 
+    participants: "40", 
+    date: "2024-12-15", 
+    createdAt: "2024-11-11", 
+    status: "Upcoming", 
+    image: "https://images.pexels.com/photos/1300467/pexels-photo-1300467.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   { 
-      id: 5, 
-      name: "New Event 4", 
-      email: "eve@example.com", 
-      participants: "25", 
-      date: "2024-12-20", 
-      createdAt: "2024-11-14", 
-      status: "Upcoming", 
-      image: "https://images.pexels.com/photos/2161601/pexels-photo-2161601.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    id: 5, 
+    name: "New Event 4", 
+    email: "eve@example.com", 
+    participants: "25", 
+    date: "2024-12-20", 
+    createdAt: "2024-11-14", 
+    status: "Upcoming", 
+    image: "https://images.pexels.com/photos/2161601/pexels-photo-2161601.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
   { 
-      id: 6, 
-      name: "New Event 5", 
-      email: "mike@example.com", 
-      participants: "50", 
-      date: "2024-12-25", 
-      createdAt: "2024-11-18", 
-      status: "Upcoming", 
-      image: "https://images.pexels.com/photos/1081074/pexels-photo-1081074.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    id: 6, 
+    name: "New Event 5", 
+    email: "mike@example.com", 
+    participants: "50", 
+    date: "2024-12-25", 
+    createdAt: "2024-11-18", 
+    status: "Upcoming", 
+    image: "https://images.pexels.com/photos/1081074/pexels-photo-1081074.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
   },
 ];
 
@@ -70,9 +70,9 @@ const DashboardEvents = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 8; 
   const navigate = useNavigate();
+  const scrollContainerRef = useRef(null); // Reference for the scroll container
 
   const totalPages = Math.ceil(eventData.length / eventsPerPage);
-
   const currentEvents = eventData.slice(currentPage * eventsPerPage, (currentPage + 1) * eventsPerPage);
 
   const handleViewDetails = (eventId) => {
@@ -81,6 +81,25 @@ const DashboardEvents = () => {
 
   const handleSeeAll = () => {
     navigate("/events");
+  };
+
+  // Function to handle mouse drag scroll
+  const handleMouseDown = (e) => {
+    const startX = e.clientX;
+    const scrollLeft = scrollContainerRef.current.scrollLeft;
+
+    const onMouseMove = (moveEvent) => {
+      const distance = moveEvent.clientX - startX;
+      scrollContainerRef.current.scrollLeft = scrollLeft - distance;
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
   };
 
   return (
@@ -105,10 +124,12 @@ const DashboardEvents = () => {
 
       {/* Horizontal Card Slider */}
       <motion.div
-         className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto lg:w-[1150px]"
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         transition={{ delay: 0.2 }}
+        ref={scrollContainerRef}
+        className="relative flex gap-8 pb-6 flex-nowrap hide-scrollbar overflow-x-auto lg:w-[1150px] w-full"
+        onMouseDown={handleMouseDown} // Listen for mouse down to initiate drag
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
       >
         {currentEvents.map((event) => (
           <motion.div
