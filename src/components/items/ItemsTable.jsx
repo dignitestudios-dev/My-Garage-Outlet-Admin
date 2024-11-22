@@ -183,25 +183,25 @@ const ItemsTable = () => {
         </button>
         <button
           onClick={() => filterByDateRange("recentlyCreated")}
-          className={`px-4 py-2 rounded-lg ${dateFilter === "recentlyCreated" ? "bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white" : "bg-gray-800 text-white hover:bg-gradient-to-r from-[#EF1C68]"}`}
+          className={`px-4 py-2 rounded-lg ${dateFilter === "recentlyCreated" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"}`}
         >
           Recently Created
         </button>
         <button
           onClick={() => filterByDateRange("lastMonth")}
-          className={`px-4 py-2 rounded-lg ${dateFilter === "lastMonth" ? "bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white" : "bg-gray-800 text-white hover:bg-gradient-to-r from-[#EF1C68]"}`}
+          className={`px-4 py-2 rounded-lg ${dateFilter === "lastMonth" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"}`}
         >
           Last Month
         </button>
         <button
           onClick={() => filterByDateRange("thisWeek")}
-          className={`px-4 py-2 rounded-lg ${dateFilter === "thisWeek" ? "bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white" : "bg-gray-800 text-white hover:bg-gradient-to-r from-[#EF1C68]"}`}
+          className={`px-4 py-2 rounded-lg ${dateFilter === "thisWeek" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"}`}
         >
           This Week
         </button>
         <button
           onClick={() => filterByDateRange("thisYear")}
-          className={`px-4 py-2 rounded-lg ${dateFilter === "thisYear" ? "bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white" : "bg-gray-800 text-white hover:bg-gradient-to-r from-[#EF1C68]"}`}
+          className={`px-4 py-2 rounded-lg ${dateFilter === "thisYear" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"}`}
         >
           This Year
         </button>

@@ -41,7 +41,7 @@ const SubscriptionTable = () => {
       </div>
 
       <div className="flex space-x-6">
-        <div className="bg-gray-800 hover:bg-gradient-to-r from-[#EF1C68] to-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 w-1/2">
+        <div className="bg-gray-800 hover:bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 w-1/2">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg hover:text-white font-semibold text-gray-100">Free Plan</h3>
             <button
@@ -63,7 +63,7 @@ const SubscriptionTable = () => {
           </div>
         </div>
 
-        <div className="bg-gray-800 hover:bg-gradient-to-r from-[#EF1C68] to-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 w-1/2">
+        <div className="bg-gray-800 hover:bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 w-1/2">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold text-white">Paid Plan</h3>
             <button

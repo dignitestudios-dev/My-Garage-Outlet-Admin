@@ -145,27 +145,27 @@ const UsersTable = () => {
       <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
   <button 
     onClick={() => handleFilterChange("all")} 
-    className={`px-4 py-2 text-sm ${filter === "all" ? 'bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gradient-to-r from-[#EF1C68]'} rounded-md w-full sm:w-auto`}>
+    className={`px-4 py-2 text-sm ${filter === "all" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"} rounded-md w-full sm:w-auto`}>
     All
   </button>
   <button 
     onClick={() => handleFilterChange("recent")} 
-    className={`px-4 py-2 text-sm ${filter === "recent" ? 'bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gradient-to-r from-[#EF1C68]'} rounded-md w-full sm:w-auto`}>
+    className={`px-4 py-2 text-sm ${filter === "recent" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"} rounded-md w-full sm:w-auto`}>
     Recently Joined
   </button>
   <button 
     onClick={() => handleFilterChange("last-month")} 
-    className={`px-4 py-2 text-sm ${filter === "last-month" ? 'bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gradient-to-r from-[#EF1C68]'} rounded-md w-full sm:w-auto`}>
+    className={`px-4 py-2 text-sm ${filter === "last-month" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"} rounded-md w-full sm:w-auto`}>
     Last Month
   </button>
   <button 
     onClick={() => handleFilterChange("this-week")} 
-    className={`px-4 py-2 text-sm ${filter === "this-week" ? 'bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gradient-to-r from-[#EF1C68]'} rounded-md w-full sm:w-auto`}>
+    className={`px-4 py-2 text-sm ${filter === "this-week" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"} rounded-md w-full sm:w-auto`}>
     This Week
   </button>
   <button 
     onClick={() => handleFilterChange("this-year")} 
-    className={`px-4 py-2 text-sm ${filter === "this-year" ? 'bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gradient-to-r from-[#EF1C68]'} rounded-md w-full sm:w-auto`}>
+    className={`px-4 py-2 text-sm ${filter === "this-year" ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white" : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"} rounded-md w-full sm:w-auto`}>
     This Year
   </button>
 </div>

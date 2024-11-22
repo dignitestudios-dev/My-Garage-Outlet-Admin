@@ -150,8 +150,8 @@ const DashboardEvents = () => {
             {/* View Details Button */}
             <button
               onClick={() => handleViewDetails(event.id)}
-              className="mt-4 px-5 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white text-sm font-semibold rounded-md"
-            >
+              className="mt-4 px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
+              >
               View Details
             </button>
           </motion.div>
