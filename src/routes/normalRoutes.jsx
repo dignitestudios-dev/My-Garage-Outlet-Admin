@@ -67,12 +67,12 @@ export const normalRoutes = [
 
   },
 
-  {
-    title: "Subscriptions",
-    url: "/subscriptions",
-    page: <GlobalLayout page={<Subscription/>} />,
+  // {
+  //   title: "Subscriptions",
+  //   url: "/subscriptions",
+  //   page: <GlobalLayout page={<Subscription/>} />,
 
-  },
+  // },
   {
     title: "Item Details",
     url: "/item-details/:id",

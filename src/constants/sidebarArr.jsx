@@ -44,11 +44,11 @@ export const sidebarArr = [
     url: "/reports",
     icon: <GoReport />,
   },
-  {
-    title: "Subscriptions",
-    url: "/subscriptions",
-    icon: <MdOutlineUnsubscribe />,
-  },
+  // {
+  //   title: "Subscriptions",
+  //   url: "/subscriptions",
+  //   icon: <MdOutlineUnsubscribe />,
+  // },
   {
     title: "Settings",
     url: "/settings",

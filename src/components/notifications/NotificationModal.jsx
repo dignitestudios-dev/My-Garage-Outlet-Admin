@@ -43,10 +43,11 @@ const NotificationModal = ({ showModal, setShowModal, handleSendNotification, ne
             value={newNotification.audience}
             onChange={(e) => setNewNotification({ ...newNotification, audience: e.target.value })}
           >
+            
             <option value='all'>All Users</option>
-            <option value='location'>Specific Location</option>
-            <option value='event'>Event Updates</option>
-            <option value='promotion'>Promotions</option>
+            <option value='Subscribers'>Subscribers</option>
+            <option value='Non Subscribers'>Non Subscribers</option>
+
           </select>
         </div>
 

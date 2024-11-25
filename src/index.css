@@ -4,11 +4,11 @@
 
 /* Hide scrollbar but still allow scrolling */
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
+    display: none;
+  }
+  
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* For Internet Explorer */
+    scrollbar-width: none;  /* For Firefox */
+  }
   
