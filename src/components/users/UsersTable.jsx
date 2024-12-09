@@ -198,9 +198,9 @@ const UsersTable = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Email
-              </th>
+              </th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Subscriber
               </th>
@@ -242,9 +242,9 @@ const UsersTable = () => {
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap">
+                {/* <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{user.email}</div>
-                </td>
+                </td> */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                     user.subscriber === "Yes" ? "bg-green-800 text-green-100" : "bg-red-800 text-red-100"

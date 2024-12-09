@@ -35,7 +35,7 @@ const Settings = () => {
 
   return (
     <motion.div
-      className="bg-gray-900 bg-opacity-50 backdrop-blur-md p-6 h-auto w-full flex flex-col overflow-auto"
+      className="h-full bg-gray-900 bg-opacity-50 backdrop-blur-md p-6 h-auto w-full flex flex-col overflow-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.2 }}
@@ -106,7 +106,7 @@ const Settings = () => {
           />
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-100">Profile Picture</label>
           <input
             type="file"
@@ -115,7 +115,7 @@ const Settings = () => {
             className="w-full mt-2"
             accept="image/*"
           />
-        </div>
+        </div> */}
 
         <button
           type="submit"

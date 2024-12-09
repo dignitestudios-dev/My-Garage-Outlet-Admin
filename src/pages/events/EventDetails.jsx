@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import EditEventModal from '../../components/events/EditEventModal';
 import DeleteEventModal from '../../components/events/DeleteEventModal';
-import { FaHeart, FaRetweet, FaComment, FaFilePdf } from 'react-icons/fa'; 
-import { FaShare } from "react-icons/fa";
-
+import { FaHeart, FaRetweet, FaComment, FaShare } from 'react-icons/fa';
+import { FaCheckCircle, FaQuestionCircle } from 'react-icons/fa';
 
 const mockEventDetails = {
     id: 'E001',
@@ -13,8 +12,16 @@ const mockEventDetails = {
     date: '2024-09-12',
     time: '10:00 AM - 2:00 PM',
     location: 'Miami, Florida',
-    participants: 'John, Alice, Bob',
-    image: "https://images.pexels.com/photos/1034664/pexels-photo-1034664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    participants: [
+        { name: 'John Doe', email: 'john@example.com', status: 'joined', id: 'P001', profilePic: 'https://randomuser.me/api/portraits/men/1.jpg' },
+        { name: 'Alice Smith', email: 'alice@example.com', status: 'maybe', id: 'P002', profilePic: 'https://randomuser.me/api/portraits/women/1.jpg' },
+        { name: 'Bob Johnson', email: 'bob@example.com', status: 'joined', id: 'P003', profilePic: 'https://randomuser.me/api/portraits/men/2.jpg' }
+    ],
+    images: [
+        "https://images.pexels.com/photos/1034664/pexels-photo-1034664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        "https://images.pexels.com/photos/1034670/pexels-photo-1034670.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        "https://images.pexels.com/photos/1034673/pexels-photo-1034673.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    ],
     likes: 120,
     reposts: 30,
     comments: 45
@@ -24,6 +31,10 @@ const EventDetails = () => {
     const { eventId } = useParams();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('eventDetails');
+    const [activeStatusTab, setActiveStatusTab] = useState('joined');
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
     const toggleEditModal = () => setIsEditModalOpen(!isEditModalOpen);
     const toggleDeleteModal = () => setIsDeleteModalOpen(!isDeleteModalOpen);
@@ -38,96 +49,199 @@ const EventDetails = () => {
         toggleDeleteModal();
     };
 
+    // Filtering participants based on status and search query
+    const filteredParticipants = mockEventDetails.participants.filter((participant) => {
+        const matchesStatus = participant.status === activeStatusTab;
+        const matchesSearch = participant.name.toLowerCase().includes(searchQuery.toLowerCase()) || participant.email.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesStatus && matchesSearch;
+    });
+
+    const goToNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % mockEventDetails.images.length);
+    };
+
+    const goToPreviousImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + mockEventDetails.images.length) % mockEventDetails.images.length);
+    };
+
     return (
-        <div className="min-h-auto w-full bg-[#001229] text-white flex flex-col items-center px-4 py-8 overflow-y-auto">
+        <div className="h-full w-full bg-[#001229] text-white flex flex-col items-center px-4 py-8 overflow-y-auto">
             <div className="w-full bg-gray-800 text-gray-200 rounded-lg shadow-lg">
-                {/* Event Image Section */}
-                <div className="relative">
+
+                {/* Carousel Section */}
+                <div className="relative w-full mb-6">
                     <img
-                        src={mockEventDetails.image}
-                        alt={mockEventDetails.title}
-                        className="w-full h-72 object-cover rounded-t-lg"
+                        src={mockEventDetails.images[currentImageIndex]}
+                        alt={`Event Image ${currentImageIndex + 1}`}
+                        className="w-full h-72 object-contain object-center rounded-t-lg"
                     />
+                    {/* Navigation Buttons */}
+                    <button
+                        onClick={goToPreviousImage}
+                        className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-75"
+                    >
+                        &#60;
+                    </button>
+                    <button
+                        onClick={goToNextImage}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-75"
+                    >
+                        &#62;
+                    </button>
                 </div>
-                <div className="p-6">
-                    <h2 className="text-4xl font-bold mb-3">{mockEventDetails.title}</h2>
-                    <p className="text-lg text-gray-400 mb-5">{mockEventDetails.description}</p>
 
-                    <div className="space-y-3">
-                        <div className="text-lg font-semibold">
-                            <span className="text-gray-400">Date:</span> {mockEventDetails.date}
-                        </div>
-                        <div className="text-lg font-semibold">
-                            <span className="text-gray-400">Time:</span> {mockEventDetails.time}
-                        </div>
-                        <div className="text-lg font-semibold">
-                            <span className="text-gray-400">Location:</span> {mockEventDetails.location}
-                        </div>
-                        <div className="text-lg font-semibold">
-                            <span className="text-gray-400">Participants:</span> {mockEventDetails.participants}
-                        </div>
-                    </div>
-
-                    {/* Social Interaction Section */}
-                    <div className="bg-gray-900 p-4 rounded-b-lg flex justify-around text-gray-300 mt-4">
-                        <div className="flex items-center space-x-2">
-                            <FaHeart className="text-red-500" />
-                            <span>{mockEventDetails.likes} Likes</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FaRetweet className="text-green-500" />
-                            <span>{mockEventDetails.reposts} Reposts</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FaComment className="text-blue-500" />
-                            <span>{mockEventDetails.comments} Comments</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <FaShare className="text-orange-500" />
-                            <span>10 Shares</span>
-                        </div>
-                    </div>
-
-                    {/* Action Buttons Section */}
-                    <div className="mt-6 flex space-x-4">
-                        {/* <button
-                            className="bg-gray-700 text-gray-200 px-5 py-2 rounded-md hover:bg-gray-600 transition-colors"
-                            onClick={toggleEditModal}
-                        >
-                            Edit Event
-                        </button> */}
-                        <button
-                            className="bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition-colors"
-                            onClick={toggleDeleteModal}
-                        >
-                            Delete Event
-                        </button>
-
-                        {/* Button for downloading PDF report */}
-                        {/* <button
-                            className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-2 shadow-md"
-                            onClick={() => {}}
-                        >
-                            <FaFilePdf className="text-xl" /> 
-                            <span>Download PDF Report</span>
-                        </button> */}
-                    </div>
+                {/* Tabs Section */}
+                <div className="flex border-b border-gray-700 w-full justify-around mb-6">
+                    <button
+                        className={`py-3 px-6 w-full text-lg font-semibold ${activeTab === 'eventDetails' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                        onClick={() => setActiveTab('eventDetails')}
+                    >
+                        Event Details
+                    </button>
+                    <button
+                        className={`py-3 px-6 w-full text-lg font-semibold ${activeTab === 'participants' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                        onClick={() => setActiveTab('participants')}
+                    >
+                        Participants
+                    </button>
                 </div>
+
+                {/* Event Details Tab */}
+                {activeTab === 'eventDetails' && (
+                    <div className="p-6">
+                        <h2 className="text-4xl font-bold mb-3">{mockEventDetails.title}</h2>
+                        <p className="text-lg text-gray-400 mb-5">{mockEventDetails.description}</p>
+
+                        <div className="space-y-3">
+                            <div className="text-lg font-semibold">
+                                <span className="text-gray-400">Date:</span> {mockEventDetails.date}
+                            </div>
+                            <div className="text-lg font-semibold">
+                                <span className="text-gray-400">Time:</span> {mockEventDetails.time}
+                            </div>
+                            <div className="text-lg font-semibold">
+                                <span className="text-gray-400">Location:</span> {mockEventDetails.location}
+                            </div>
+                            <div className="text-lg font-semibold">
+                                <span className="text-gray-400">Participants:</span> {mockEventDetails.participants.length}
+                            </div>
+                        </div>
+
+                        {/* Social Interaction Section */}
+                        <div className="bg-gray-900 p-4 rounded-b-lg flex justify-around text-gray-300 mt-4">
+                            <div className="flex items-center space-x-2">
+                                <FaHeart className="text-red-500" />
+                                <span>{mockEventDetails.likes} Likes</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <FaRetweet className="text-green-500" />
+                                <span>{mockEventDetails.reposts} Reposts</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <FaComment className="text-blue-500" />
+                                <span>{mockEventDetails.comments} Comments</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <FaShare className="text-orange-500" />
+                                <span>10 Shares</span>
+                            </div>
+                        </div>
+
+                        {/* Action Buttons Section */}
+                        <div className="mt-6 flex space-x-4">
+                            <button
+                                className="bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition-colors"
+                                onClick={toggleDeleteModal}
+                            >
+                                Delete Event
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Participants Tab */}
+                {activeTab === 'participants' && (
+                    <div className="w-full bg-gray-800 text-gray-200 p-6 rounded-lg shadow-md">
+                        {/* Status Tabs for Joined/Maybe */}
+                        <div className="flex justify-start mb-4 space-x-4">
+                            <button
+                                className={`flex items-center py-1 px-4 text-sm font-semibold ${activeStatusTab === 'joined' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                                onClick={() => setActiveStatusTab('joined')}
+                            >
+                                <FaCheckCircle className="mr-2 text-green-500 text-lg" />
+                                Joined
+                            </button>
+                            <button
+                                className={`flex items-center py-1 px-4 text-sm font-semibold ${activeStatusTab === 'maybe' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                                onClick={() => setActiveStatusTab('maybe')}
+                            >
+                                <FaQuestionCircle className="mr-2 text-yellow-500 text-lg" />
+                                Maybe
+                            </button>
+                        </div>
+
+                        {/* Search Bar */}
+                        <div className="mb-4">
+                            <input
+                                type="text"
+                                placeholder="Search participants by name or email..."
+                                className="w-full px-4 py-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#EF1C68]"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+
+                        {/* Participant Cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {filteredParticipants.length > 0 ? (
+                                filteredParticipants.map((participant) => (
+                                    <div key={participant.id} className="bg-gray-700 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                                        <div className="flex items-center mb-4">
+                                            <img
+                                                src={participant.profilePic}
+                                                alt={participant.name}
+                                                className="w-16 h-16 rounded-full object-cover mr-4"
+                                            />
+                                            <div>
+                                                <h3 className="text-lg font-semibold">{participant.name}</h3>
+                                                <p className="text-sm text-gray-400">{participant.email}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Status Indicator */}
+                                        <div className="flex items-center space-x-2">
+                                            {participant.status === 'joined' ? (
+                                                <FaCheckCircle className="text-green-500" />
+                                            ) : (
+                                                <FaQuestionCircle className="text-yellow-500" />
+                                            )}
+                                            <span className="text-sm text-gray-400">
+                                                {participant.status === 'joined' ? 'Joined' : 'Maybe'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-gray-400">No participants found</p>
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Modals for Edit and Delete */}
             {isEditModalOpen && (
                 <EditEventModal
                     eventDetails={mockEventDetails}
-                    toggleModal={toggleEditModal}
-                    handleSave={handleSave}
+                    onSave={handleSave}
+                    onClose={toggleEditModal}
                 />
             )}
             {isDeleteModalOpen && (
                 <DeleteEventModal
-                    eventDetails={mockEventDetails}
-                    toggleModal={toggleDeleteModal}
-                    handleDelete={handleDelete}
+                    eventId={mockEventDetails.id}
+                    onDelete={handleDelete}
+                    onClose={toggleDeleteModal}
                 />
             )}
         </div>

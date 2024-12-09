@@ -5,9 +5,9 @@ import DeleteUserModal from '../../components/users/DeleteUserModal';
 import SuspendUserModal from '../../components/users/SuspendUserModal';
 
 const mockEventHistory = [
-    { id: 'E001', name: 'Boat Racing', date: '2024-09-12', participants: 'John, Alice, Bob', status: 'Joined' },
-    { id: 'E002', name: 'Sea Adventure', date: '2024-08-15', participants: 'Mary, Sam', status: 'Maybe' },
-    { id: 'E003', name: 'Fishing Trip', date: '2024-07-05', participants: 'Alice, Mike', status: 'Created' },
+    { id: 'E001', name: 'Boat Racing', date: '2024-09-12', participants: 'Joined', status: 'Joined' },
+    { id: 'E002', name: 'Sea Adventure', date: '2024-08-15', participants: 'Maybe', status: 'Maybe' },
+    { id: 'E003', name: 'Fishing Trip', date: '2024-07-05', participants: 'Joined', status: 'Created' },
 ];
 
 const mockItemList = [
@@ -53,7 +53,7 @@ const UsersInfo = () => {
 
     // Function to navigate to event details
     const goToEventDetails = (eventId) => {
-        navigate(`/event-details`);
+        navigate(`/event-details/1`);
     };
 
     // Function to navigate to item details
@@ -90,32 +90,39 @@ const UsersInfo = () => {
                             <div className="flex-1 mb-4">
                                 <h2 className="text-2xl font-bold ">{user.name}</h2>
                                 <p className="mb-4">Connections 14</p>
+
+                                <p className="mb-4">Number : 12345678911</p>
+
+                                <p className="mb-4">Address : north street demo address </p>
+
+                                <p className="mb-4">Email : Email@123.com</p>
+
                                 <div className="flex space-x-4">
-                                    <button
+                                    {/* <button
                                         className="bg-gray-800 text-gray-200 px-5 py-2 rounded-md hover:bg-gray-900 border border-gray-700 transition-colors"
                                         onClick={toggleModal}
                                     >
                                         Edit
-                                    </button>
+                                    </button> */}
                                     <button
-                                        className="bg-gray-800 text-gray-200 px-5 py-2 rounded-md hover:bg-gray-900 border border-gray-700 transition-colors"
+                                        className="bg-red-600 text-gray-200 px-5 py-2 rounded-md hover:bg-red-800 border border-gray-700 transition-colors"
                                         onClick={toggleSuspendModal}
                                     >
                                         Suspend
                                     </button>
-                                    <button
+                                    {/* <button
                                         className="bg-gray-800 text-gray-200 px-5 py-2 rounded-md hover:bg-gray-900 border border-gray-700 transition-colors"
                                         onClick={toggleDeleteModal}
                                     >
                                         Delete
-                                    </button>
+                                    </button> */}
                                     {/* Download PDF Report Button */}
-                                    <button
+                                    {/* <button
                                         className="bg-gray-800 text-gray-200 px-5 py-2 rounded-md hover:bg-gray-900 border border-gray-700 transition-colors"
                                         onClick={() => {}}
                                     >
                                         Download PDF Report
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                         </div>
@@ -167,7 +174,7 @@ const UsersInfo = () => {
                                         <tr>
                                             <th className="px-4 py-2 text-left border-b border-gray-700">Event Name</th>
                                             <th className="px-4 py-2 text-left border-b border-gray-700">Date</th>
-                                            <th className="px-4 py-2 text-left border-b border-gray-700">Participants</th>
+                                            <th className="px-4 py-2 text-left border-b border-gray-700">Event Status</th>
                                             <th className="px-4 py-2 text-left border-b border-gray-700">Actions</th>
                                         </tr>
                                     </thead>
@@ -194,8 +201,8 @@ const UsersInfo = () => {
                                     <thead>
                                         <tr>
                                             <th className="px-4 py-2 text-left border-b border-gray-700">Item Name</th>
-                                            <th className="px-4 py-2 text-left border-b border-gray-700">Price</th>
-                                            <th className="px-4 py-2 text-left border-b border-gray-700">Sold</th>
+                                            {/* <th className="px-4 py-2 text-left border-b border-gray-700">Price</th>
+                                            <th className="px-4 py-2 text-left border-b border-gray-700">Sold</th> */}
                                             <th className="px-4 py-2 text-left border-b border-gray-700">Actions</th>
                                         </tr>
                                     </thead>
@@ -203,8 +210,8 @@ const UsersInfo = () => {
                                         {mockItemList.map((item) => (
                                             <tr key={item.id}>
                                                 <td className="px-4 py-2 border-b border-gray-700">{item.name}</td>
-                                                <td className="px-4 py-2 border-b border-gray-700">{item.price}</td>
-                                                <td className="px-4 py-2 border-b border-gray-700">{item.sold ? 'Sold' : 'Available'}</td>
+                                                {/* <td className="px-4 py-2 border-b border-gray-700">{item.price}</td>
+                                                <td className="px-4 py-2 border-b border-gray-700">{item.sold ? 'Sold' : 'Available'}</td> */}
                                                 <td className="px-4 py-2 border-b border-gray-700">
                                                     <button className="text-blue-500" onClick={() => goToItemDetails(item.id)}>
                                                         View Details
