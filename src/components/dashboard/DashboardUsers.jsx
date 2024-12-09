@@ -90,7 +90,7 @@ const DashboardUsers = () => {
             </div>
 
             <div className="text-lg font-semibold text-gray-100">{user.name}</div>
-            <div className="text-sm text-gray-400">{user.email}</div>
+            {/* <div className="text-sm text-gray-400">{user.email}</div> */}
             <div className="mt-1 text-sm text-gray-300">{user.connections} Connections</div>
 
             <div className="mt-4 flex items-center justify-center space-x-2">

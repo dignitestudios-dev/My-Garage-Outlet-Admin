@@ -86,12 +86,12 @@ const ItemDetails = () => {
 
                     {/* Action Buttons Section */}
                     <div className="mt-6 flex justify-start space-x-6">
-                        <button
+                        {/* <button
                             className="bg-gray-700 text-gray-200 px-6 py-2 rounded-md hover:bg-gray-600 transition-colors shadow-md"
                             onClick={toggleEditModal}
                         >
                             Edit Item
-                        </button>
+                        </button> */}
                         <button
                             className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors shadow-md"
                             onClick={toggleDeleteModal}
@@ -100,13 +100,13 @@ const ItemDetails = () => {
                         </button>
 
                         {/* Button for downloading PDF report */}
-                        <button
+                        {/* <button
                             className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-md flex items-center space-x-2"
                             onClick={() => {}}
                         >
-                            <FaFilePdf className="text-xl" /> {/* Added PDF icon */}
+                            <FaFilePdf className="text-xl" /> 
                             <span>Download PDF Report</span>
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@ const ItemDetails = () => {
             )}
             {isDeleteModalOpen && (
                 <DeleteItemModal
-                    itemDetails={mockItemDetails} // Ensure the prop name matches
+                    itemDetails={mockItemDetails} 
                     toggleModal={toggleDeleteModal}
                     handleDelete={handleDelete}
                 />

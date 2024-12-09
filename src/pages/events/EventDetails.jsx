@@ -90,12 +90,12 @@ const EventDetails = () => {
 
                     {/* Action Buttons Section */}
                     <div className="mt-6 flex space-x-4">
-                        <button
+                        {/* <button
                             className="bg-gray-700 text-gray-200 px-5 py-2 rounded-md hover:bg-gray-600 transition-colors"
                             onClick={toggleEditModal}
                         >
                             Edit Event
-                        </button>
+                        </button> */}
                         <button
                             className="bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition-colors"
                             onClick={toggleDeleteModal}
@@ -104,13 +104,13 @@ const EventDetails = () => {
                         </button>
 
                         {/* Button for downloading PDF report */}
-                        <button
+                        {/* <button
                             className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-2 shadow-md"
                             onClick={() => {}}
                         >
-                            <FaFilePdf className="text-xl" /> {/* PDF Icon */}
+                            <FaFilePdf className="text-xl" /> 
                             <span>Download PDF Report</span>
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>

@@ -239,7 +239,7 @@ const ItemsTable = () => {
 
             <div className="text-lg font-semibold text-white mb-1">{item.name}</div>
             <div className="text-sm text-white mb-2">Seller: {item.sellerName}</div>
-            <div className="text-2xl font-bold text-white mb-4">{item.price}</div>
+            {/* <div className="text-2xl font-bold text-white mb-4">{item.price}</div> */}
 
             <div className="flex items-center justify-between w-full">
               <button

@@ -10,7 +10,7 @@
     { 
         id: 1, 
         name: "New Event", 
-        email: "john@example.com", 
+        email: "john", 
         participants: "10", 
         date: "2024-11-12", 
         createdAt: "2024-10-15", 
@@ -20,7 +20,7 @@
     { 
         id: 2, 
         name: "New Event 1", 
-        email: "jane@example.com", 
+        email: "jane", 
         participants: "20", 
         date: "2024-12-04", 
         createdAt: "2024-11-05", 
@@ -30,7 +30,7 @@
     { 
         id: 3, 
         name: "New Event 2", 
-        email: "bob@example.com", 
+        email: "bob", 
         participants: "30", 
         date: "2024-12-10", 
         createdAt: "2024-11-10", 
@@ -40,7 +40,7 @@
     { 
         id: 4, 
         name: "New Event 3", 
-        email: "alice@example.com", 
+        email: "alice", 
         participants: "40", 
         date: "2024-12-15", 
         createdAt: "2024-11-11", 
@@ -50,7 +50,7 @@
     { 
         id: 5, 
         name: "New Event 4", 
-        email: "eve@example.com", 
+        email: "eve", 
         participants: "25", 
         date: "2024-12-20", 
         createdAt: "2024-11-14", 
@@ -60,7 +60,7 @@
     { 
         id: 6, 
         name: "New Event 5", 
-        email: "mike@example.com", 
+        email: "mike", 
         participants: "50", 
         date: "2024-12-25", 
         createdAt: "2024-11-18", 

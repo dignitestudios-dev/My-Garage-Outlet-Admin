@@ -23,7 +23,7 @@ const ForgotPassword = () => {
           <BiArrowBack className="text-3xl text-white" />
         </button>
         <div className="w-full flex justify-start items-start flex-col">
-          <h1 className=" text-[48px] font-bold text-white leading-[64.8px] tracking-[-1.2px]">
+          <h1 className="text-[48px] font-bold text-white leading-[64.8px] tracking-[-1.2px]">
             Forgot Password
           </h1>
           <p className="w-[90%] font-normal text-[16px] text-white leading-[21.6px] tracking-[-1.2px]">
