@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import EditEventModal from '../../components/events/EditEventModal';
 import DeleteEventModal from '../../components/events/DeleteEventModal';
-import { FaHeart, FaRetweet, FaComment, FaShare } from 'react-icons/fa';
-import { FaCheckCircle, FaQuestionCircle } from 'react-icons/fa';
+import { FaHeart, FaRetweet, FaComment, FaShare,FaCheckCircle, FaQuestionCircle,FaCalendarAlt, FaClock, FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
+
 
 const mockEventDetails = {
     id: 'E001',
@@ -66,7 +66,7 @@ const EventDetails = () => {
 
     return (
         <div className="h-full w-full bg-[#001229] text-white flex flex-col items-center px-4 py-8 overflow-y-auto">
-            <div className="w-full bg-gray-800 text-gray-200 rounded-lg shadow-lg">
+            <div className="w-full bg-[#001229] text-gray-200 rounded-lg shadow-lg">
 
                 {/* Carousel Section */}
                 <div className="relative w-full mb-6">
@@ -93,13 +93,13 @@ const EventDetails = () => {
                 {/* Tabs Section */}
                 <div className="flex border-b border-gray-700 w-full justify-around mb-6">
                     <button
-                        className={`py-3 px-6 w-full text-lg font-semibold ${activeTab === 'eventDetails' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                        className={`py-3 px-6 w-full rounded-full text-lg font-semibold ${activeTab === 'eventDetails' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
                         onClick={() => setActiveTab('eventDetails')}
                     >
                         Event Details
                     </button>
                     <button
-                        className={`py-3 px-6 w-full text-lg font-semibold ${activeTab === 'participants' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                        className={`py-3 px-6 w-full rounded-full text-lg font-semibold ${activeTab === 'participants' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
                         onClick={() => setActiveTab('participants')}
                     >
                         Participants
@@ -108,74 +108,97 @@ const EventDetails = () => {
 
                 {/* Event Details Tab */}
                 {activeTab === 'eventDetails' && (
-                    <div className="p-6">
-                        <h2 className="text-4xl font-bold mb-3">{mockEventDetails.title}</h2>
-                        <p className="text-lg text-gray-400 mb-5">{mockEventDetails.description}</p>
+    <div className="p-6 bg-gray-900 rounded-lg shadow-lg">
+        {/* Event Title and Description */}
+        <h2 className="text-5xl font-bold text-[#EF1C68] mb-4">{mockEventDetails.title}</h2>
+        <p className="text-lg text-gray-400 mb-6">{mockEventDetails.description}</p>
 
-                        <div className="space-y-3">
-                            <div className="text-lg font-semibold">
-                                <span className="text-gray-400">Date:</span> {mockEventDetails.date}
-                            </div>
-                            <div className="text-lg font-semibold">
-                                <span className="text-gray-400">Time:</span> {mockEventDetails.time}
-                            </div>
-                            <div className="text-lg font-semibold">
-                                <span className="text-gray-400">Location:</span> {mockEventDetails.location}
-                            </div>
-                            <div className="text-lg font-semibold">
-                                <span className="text-gray-400">Participants:</span> {mockEventDetails.participants.length}
-                            </div>
-                        </div>
+        {/* Event Details Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                <div className="flex items-center space-x-2 mb-3">
+                    <FaCalendarAlt className="text-[#EF1C68] text-xl" />
+                    <h3 className="text-xl font-semibold text-gray-300">Date:</h3>
+                </div>
+                <p className="text-gray-400 text-lg">{mockEventDetails.date}</p>
+            </div>
+            <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                <div className="flex items-center space-x-2 mb-3">
+                    <FaClock className="text-[#EF1C68] text-xl" />
+                    <h3 className="text-xl font-semibold text-gray-300">Time:</h3>
+                </div>
+                <p className="text-gray-400 text-lg">{mockEventDetails.time}</p>
+            </div>
+            <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                <div className="flex items-center space-x-2 mb-3">
+                    <FaMapMarkerAlt className="text-[#EF1C68] text-xl" />
+                    <h3 className="text-xl font-semibold text-gray-300">Location:</h3>
+                </div>
+                <p className="text-gray-400 text-lg">{mockEventDetails.location}</p>
+            </div>
+        </div>
 
-                        {/* Social Interaction Section */}
-                        <div className="bg-gray-900 p-4 rounded-b-lg flex justify-around text-gray-300 mt-4">
-                            <div className="flex items-center space-x-2">
-                                <FaHeart className="text-red-500" />
-                                <span>{mockEventDetails.likes} Likes</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <FaRetweet className="text-green-500" />
-                                <span>{mockEventDetails.reposts} Reposts</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <FaComment className="text-blue-500" />
-                                <span>{mockEventDetails.comments} Comments</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <FaShare className="text-orange-500" />
-                                <span>10 Shares</span>
-                            </div>
-                        </div>
+        {/* Participants Section */}
+        <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-6">
+            <div className="flex items-center space-x-2 mb-3">
+                <FaUsers className="text-[#EF1C68] text-xl" />
+                <h3 className="text-xl font-semibold text-gray-300">Participants:</h3>
+            </div>
+            <p className="text-gray-400  text-lg">{mockEventDetails.participants.length} Participants</p>
+        </div>
 
-                        {/* Action Buttons Section */}
-                        <div className="mt-6 flex space-x-4">
-                            <button
-                                className="bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition-colors"
-                                onClick={toggleDeleteModal}
-                            >
-                                Delete Event
-                            </button>
-                        </div>
-                    </div>
-                )}
+        {/* Social Interaction Section */}
+        <div className="bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center text-gray-300 mt-6">
+            <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                    <FaHeart className="text-red-500 text-lg" />
+                    <span>{mockEventDetails.likes} Likes</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <FaRetweet className="text-green-500 text-lg" />
+                    <span>{mockEventDetails.reposts} Reposts</span>
+                </div>
+            </div>
+            <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                    <FaComment className="text-blue-500 text-lg" />
+                    <span>{mockEventDetails.comments} Comments</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <FaShare className="text-orange-500 text-lg" />
+                    <span>10 Shares</span>
+                </div>
+            </div>
+        </div>
+
+        {/* Action Buttons Section */}
+        <div className="mt-8 flex justify-end space-x-4">
+            <button
+                className="bg-red-600 text-white px-6 py-3 rounded-md hover:bg-red-700 transition-colors"
+                onClick={toggleDeleteModal}
+            >
+                Delete Event
+            </button>
+        </div>
+    </div>
+)}
+
 
                 {/* Participants Tab */}
                 {activeTab === 'participants' && (
-                    <div className="w-full bg-gray-800 text-gray-200 p-6 rounded-lg shadow-md">
+                    <div className="w-full bg-[#001229] text-gray-200 p-6 rounded-lg shadow-md">
                         {/* Status Tabs for Joined/Maybe */}
                         <div className="flex justify-start mb-4 space-x-4">
                             <button
-                                className={`flex items-center py-1 px-4 text-sm font-semibold ${activeStatusTab === 'joined' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                                className={`flex items-center rounded-full py-2 px-4 text-sm font-semibold ${activeStatusTab === 'joined' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
                                 onClick={() => setActiveStatusTab('joined')}
                             >
-                                <FaCheckCircle className="mr-2 text-green-500 text-lg" />
                                 Joined
                             </button>
                             <button
-                                className={`flex items-center py-1 px-4 text-sm font-semibold ${activeStatusTab === 'maybe' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                                className={`flex items-center rounded-full py-2py-1 px-4 text-sm font-semibold ${activeStatusTab === 'maybe' ? 'bg-[#EF1C68] text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
                                 onClick={() => setActiveStatusTab('maybe')}
                             >
-                                <FaQuestionCircle className="mr-2 text-yellow-500 text-lg" />
                                 Maybe
                             </button>
                         </div>
@@ -185,7 +208,7 @@ const EventDetails = () => {
                             <input
                                 type="text"
                                 placeholder="Search participants by name or email..."
-                                className="w-full px-4 py-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#EF1C68]"
+                                className="w-full px-4 py-2 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-[#EF1C68]"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -195,7 +218,7 @@ const EventDetails = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {filteredParticipants.length > 0 ? (
                                 filteredParticipants.map((participant) => (
-                                    <div key={participant.id} className="bg-gray-700 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                                    <div key={participant.id} className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
                                         <div className="flex items-center mb-4">
                                             <img
                                                 src={participant.profilePic}
@@ -246,6 +269,6 @@ const EventDetails = () => {
             )}
         </div>
     );
-};
+};  
 
 export default EventDetails;
