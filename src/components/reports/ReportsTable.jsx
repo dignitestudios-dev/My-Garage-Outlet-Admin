@@ -170,8 +170,8 @@ const ReportsTable = () => {
                 />
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Report Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Email</th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Email</th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Reason</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Edit</th>
@@ -195,8 +195,8 @@ const ReportsTable = () => {
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.type}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.email}</td>
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.email}</td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.reason}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{report.date}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">

@@ -120,6 +120,7 @@ const ItemDetails = () => {
                             Delete Item
                         </button>
                     </div>
+                    
                 </div>
 
                 
