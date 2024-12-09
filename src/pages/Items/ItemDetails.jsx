@@ -5,12 +5,15 @@ import EditItemModal from '../../components/items/EditItemModal';
 import DeleteItemModal from '../../components/items/DeleteItemModal';
 import { FaShare } from "react-icons/fa";
 
-
 const mockItemDetails = {
     id: 'E001',
     title: 'Item Title',
     description: 'Placeholder Item Description',
-    image: "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",  
+    images: [
+        "https://images.pexels.com/photos/1721932/pexels-photo-1721932.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",  
+        "https://images.pexels.com/photos/1695634/pexels-photo-1695634.jpeg",
+        "https://images.pexels.com/photos/2131757/pexels-photo-2131757.jpeg"
+    ],  
     geolocation: { lat: 25.7617, lon: -80.1918 }, // Miami coordinates
     city: 'Miami',
     zipcode: '33101',
@@ -23,6 +26,7 @@ const ItemDetails = () => {
     const { eventId } = useParams();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0); // State to track current image in the carousel
 
     const toggleEditModal = () => setIsEditModalOpen(!isEditModalOpen);
     const toggleDeleteModal = () => setIsDeleteModalOpen(!isDeleteModalOpen);
@@ -37,16 +41,40 @@ const ItemDetails = () => {
         toggleDeleteModal(); 
     };
 
+    const goToNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % mockItemDetails.images.length);
+    };
+
+    const goToPreviousImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + mockItemDetails.images.length) % mockItemDetails.images.length);
+    };
+
     return (
         <div className="h-auto w-full bg-[#001229] text-white flex flex-col items-center px-4 py-8 overflow-y-auto">
             <div className="w-full bg-gray-800 text-gray-200 rounded-lg shadow-lg">
-                {/* Item Image Section */}
+                {/* Item Image Carousel Section */}
                 <div className="relative w-full">
-                    <img
-                        src={mockItemDetails.image}
-                        alt={mockItemDetails.title}
-                        className="w-full h-72 object-cover rounded-t-lg"
-                    />
+                    <div className="relative w-full h-72">
+                        <img
+                            src={mockItemDetails.images[currentImageIndex]}
+                            alt={mockItemDetails.title}
+                            className="w-full h-full object-contain rounded-t-lg"
+                        />
+                    </div>
+
+                    {/* Carousel Controls */}
+                    <button 
+                        onClick={goToPreviousImage}
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2"
+                    >
+                        &#8249;
+                    </button>
+                    <button 
+                        onClick={goToNextImage}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2"
+                    >
+                        &#8250;
+                    </button>
                 </div>
 
                 {/* Item Details Section */}
@@ -63,7 +91,6 @@ const ItemDetails = () => {
                             <strong className="text-gray-500">Geolocation:</strong> Lat: {mockItemDetails.geolocation.lat}, Lon: {mockItemDetails.geolocation.lon}
                         </div>
                     </div>
-
 
                     <div className="bg-gray-900 p-4 rounded-lg flex justify-between items-center text-gray-300">
                         <div className="flex items-center space-x-2">
@@ -86,27 +113,12 @@ const ItemDetails = () => {
 
                     {/* Action Buttons Section */}
                     <div className="mt-6 flex justify-start space-x-6">
-                        {/* <button
-                            className="bg-gray-700 text-gray-200 px-6 py-2 rounded-md hover:bg-gray-600 transition-colors shadow-md"
-                            onClick={toggleEditModal}
-                        >
-                            Edit Item
-                        </button> */}
                         <button
                             className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors shadow-md"
                             onClick={toggleDeleteModal}
                         >
                             Delete Item
                         </button>
-
-                        {/* Button for downloading PDF report */}
-                        {/* <button
-                            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-md flex items-center space-x-2"
-                            onClick={() => {}}
-                        >
-                            <FaFilePdf className="text-xl" /> 
-                            <span>Download PDF Report</span>
-                        </button> */}
                     </div>
                 </div>
             </div>
