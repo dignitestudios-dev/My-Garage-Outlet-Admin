@@ -148,28 +148,24 @@ const EventDetails = () => {
         </div>
 
         {/* Social Interaction Section */}
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center text-gray-300 mt-6">
-            <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                    <FaHeart className="text-red-500 text-lg" />
-                    <span>{mockEventDetails.likes} Likes</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                    <FaRetweet className="text-green-500 text-lg" />
-                    <span>{mockEventDetails.reposts} Reposts</span>
-                </div>
-            </div>
-            <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                    <FaComment className="text-blue-500 text-lg" />
-                    <span>{mockEventDetails.comments} Comments</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                    <FaShare className="text-orange-500 text-lg" />
-                    <span>10 Shares</span>
-                </div>
-            </div>
-        </div>
+        <div className="bg-gray-800 p-4 rounded-lg flex justify-between items-center text-gray-300">
+                        <div className="flex items-center space-x-2">
+                            <FaHeart className="text-red-500" />
+                            <span>{mockEventDetails.likes} Likes</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <FaRetweet className="text-green-500" />
+                            <span>{mockEventDetails.reposts} Reposts</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <FaComment className="text-blue-500" />
+                            <span>{mockEventDetails.comments} Comments</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <FaShare className="text-orange-500" />
+                            <span>{mockEventDetails.comments} Shares</span>
+                        </div>
+                    </div>
 
         {/* Action Buttons Section */}
         <div className="mt-8 flex justify-end space-x-4">
