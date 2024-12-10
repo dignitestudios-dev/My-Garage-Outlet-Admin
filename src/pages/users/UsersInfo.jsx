@@ -58,7 +58,7 @@ const UsersInfo = () => {
     };
 
     const goToItemDetails = (itemId) => {
-        navigate(`/item-details`);
+        navigate(`/item-details/1`);
     };
 
     const handleEventFilterChange = (e) => {

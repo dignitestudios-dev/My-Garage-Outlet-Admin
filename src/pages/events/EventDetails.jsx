@@ -148,7 +148,7 @@ const EventDetails = () => {
         </div>
 
         {/* Social Interaction Section */}
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center text-gray-300 mt-6">
+        <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center text-gray-300 mt-6">
             <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                     <FaHeart className="text-red-500 text-lg" />
