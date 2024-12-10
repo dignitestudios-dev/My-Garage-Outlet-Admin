@@ -1,30 +1,24 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { FaUser, FaExclamationTriangle, FaCalendarAlt } from 'react-icons/fa';
-// import EditReportModal from './EditReportModal';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaUser, FaExclamationTriangle, FaCalendarAlt, FaEye } from 'react-icons/fa';
 import DeleteReportModal from '../../components/reports/DeleteReportModal';
+
 const mockReportDetails = {
     id: 'R001',
     reportType: 'User', // Can be 'User', 'Event', or 'Item'
     reporterName: 'John Doe',
     reporterEmail: 'john.doe@example.com',
     reason: 'Inappropriate content',
-    status: 'Pending', // Could be 'Pending', 'Resolved', 'Rejected'
+    // status: 'Pending', // Could be 'Pending', 'Resolved', 'Rejected'
     dateReported: '2024-11-10',
+    reportedUsername: 'jane_doe', // Mock username for the reported user
 };
 
 const ReportDetails = () => {
-    const { reportId } = useParams();
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const navigate = useNavigate();
 
-    const toggleEditModal = () => setIsEditModalOpen(!isEditModalOpen);
     const toggleDeleteModal = () => setIsDeleteModalOpen(!isDeleteModalOpen);
-
-    const handleSave = (updatedReason) => {
-        console.log('Report reason updated to:', updatedReason);
-        toggleEditModal();
-    };
 
     const handleDelete = () => {
         console.log('Report deleted!');
@@ -32,34 +26,49 @@ const ReportDetails = () => {
     };
 
     return (
-        <div className="h-full w-full bg-[#001229] text-white flex flex-col items-center px-4 py-8 overflow-y-auto">
-            <div className="w-full bg-gray-800 text-gray-200 rounded-lg shadow-lg">
-                <div className="p-6 space-y-6">
-                    <h2 className="text-3xl md:text-4xl font-semibold text-white">Report #{mockReportDetails.id}</h2>
-                    <p className="text-lg md:text-xl text-gray-400">{`Report Type: ${mockReportDetails.reportType}`}</p>
+        <div className="h-full w-full bg-[#001229] text-white flex flex-col items-center px-6 py-10 overflow-y-auto">
+            <div className="w-full max-w-4xl bg-gray-800 text-gray-200 rounded-lg shadow-lg">
+                <div className="p-8 space-y-6">
+                    <h2 className="text-3xl font-semibold text-white mb-4">Report Details</h2>
+                    <p className="text-lg text-gray-400">{`Report Type: ${mockReportDetails.reportType}`}</p>
 
-                    <div className="space-y-4">
+                    <div className="space-y-6 mt-4">
                         <div className="text-lg text-gray-300">
-                            <strong className="text-gray-500">Reported By:</strong> {mockReportDetails.reporterName} ({mockReportDetails.reporterEmail})
+                            <strong className="text-gray-500">Reported By:</strong> {mockReportDetails.reporterName} 
                         </div>
+
+                        <div className="flex items-center justify-between space-x-4 text-lg text-gray-300">
+                            <div>
+                                <strong className="text-gray-500">Reported User:</strong> {mockReportDetails.reportedUsername}
+                            </div>
+                            {/* View Button as Link */}
+                            <Link
+                                to={mockReportDetails.reportType === 'User' ? `/user-info/${mockReportDetails.reportedUsername}` : `/event-details/${mockReportDetails.id}`}
+                                className="flex items-center text-blue-500 hover:text-blue-700 font-semibold"
+                            >
+                                <FaEye className="mr-2" />
+                                View
+                            </Link>
+                        </div>
+
                         <div className="text-lg text-gray-300">
                             <strong className="text-gray-500">Reason:</strong> {mockReportDetails.reason}
                         </div>
-                        <div className="text-lg text-gray-300">
-                            <strong className="text-gray-500">Status: </strong>
+                        {/* <div className="text-lg text-gray-300">
+                            <strong className="text-gray-500">Status:</strong> 
                             <span className={`font-semibold ${mockReportDetails.status === 'Resolved' ? 'text-green-500' : mockReportDetails.status === 'Rejected' ? 'text-red-500' : 'text-yellow-500'}`}>
                                 {mockReportDetails.status}
                             </span>
-                        </div>
+                        </div> */}
                         <div className="text-lg text-gray-300">
                             <strong className="text-gray-500">Date Reported:</strong> {mockReportDetails.dateReported}
                         </div>
                     </div>
 
-                    <div className="bg-gray-900 p-4 rounded-lg flex justify-between items-center text-gray-300">
+                    <div className="bg-gray-900 p-6 rounded-lg flex justify-between items-center text-gray-300">
                         <div className="flex items-center space-x-2">
                             <FaUser className="text-blue-500" />
-                            <span>{mockReportDetails.reporterName}</span>
+                            <span>jane_doe</span>
                         </div>
                         <div className="flex items-center space-x-2">
                             <FaExclamationTriangle className="text-yellow-500" />
@@ -72,33 +81,18 @@ const ReportDetails = () => {
                     </div>
 
                     <div className="mt-6 flex justify-start space-x-6">
-                         {/* Delete Button */}
-                         <button
-                            className="bg-gray-700 text-gray-200 px-6 py-2 rounded-md hover:bg-gray-600 transition-colors"
-                            // onClick={toggleEditModal}
-                        >
-                            View Reported Event
-                                                    </button>
-                         <button
+                        {/* Delete Reported Content Button */}
+                        <button
                             className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors"
                             onClick={toggleDeleteModal}
                         >
                             Delete Reported Content
                         </button>
-                
-                       
                     </div>
                 </div>
             </div>
 
             {/* Modals */}
-            {/* {isEditModalOpen && (
-                <EditReportModal
-                    eventDetails={mockReportDetails}
-                    toggleModal={toggleEditModal}
-                    handleSave={handleSave}
-                />
-            )} */}
             {isDeleteModalOpen && (
                 <DeleteReportModal
                     eventDetails={mockReportDetails}
