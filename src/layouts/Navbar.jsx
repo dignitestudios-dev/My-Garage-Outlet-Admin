@@ -3,15 +3,16 @@ import { Link } from "react-router-dom";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { GlobalContext } from "../contexts/GlobalContext";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const { navigate } = useContext(GlobalContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const admin = Cookies.get("admin") ? JSON.parse(Cookies.get("admin")) : null;
 
   return (
     <div className="w-full h-[60px] bg-[#001229] border-b border-gray-700 flex justify-between items-center px-6 shadow-lg">
-      <div className="flex items-center gap-6">
-      </div>
+      <div className="flex items-center gap-6"></div>
 
       <div className="flex items-center gap-6">
         <Link
@@ -27,29 +28,25 @@ const Navbar = () => {
           className="flex items-center gap-2 relative"
         >
           <img
-            src='https://i.pravatar.cc/50?img=12'
-
+            src="https://i.pravatar.cc/50?img=12"
             alt="Profile"
             className="w-[28px] h-[28px] rounded-full cursor-pointer"
             onClick={() => navigate("/settings")}
           />
           <div className="w-auto flex flex-col justify-start items-start">
             <p
-              className="text-[11px] font-normal text-white/50 hover:text-white transition-all"
+              className="text-[11px] font-normal text-white hover:text-white transition-all"
               onClick={() => navigate("/profile", "Profile")}
             >
-              Welcome back,
+              {admin?.name}
             </p>
             <p
               className="text-[11px] font-medium text-white hover:text-[#EF1C68] transition-all"
               onClick={() => navigate("/settings", "Profile")}
             >
-              Admin
+              {admin?.email}
             </p>
           </div>
-
-          
-         
         </button>
       </div>
     </div>

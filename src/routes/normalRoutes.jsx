@@ -1,4 +1,4 @@
-import GlobalLayout from "../layouts/GlobalLayout"
+import GlobalLayout from "../layouts/GlobalLayout";
 import Home from "../pages/dashboard/Home";
 import NotificationsPage from "../pages/notifications/NotificationsPage";
 import Users from "../pages/users/Users";
@@ -12,9 +12,7 @@ import Subscription from "../pages/subscriptions/Subscription";
 import ItemDetails from "../pages/Items/ItemDetails";
 import Settings from "../pages/settings/Settings";
 
-
 export const normalRoutes = [
- 
   {
     title: "Home",
     url: "/",
@@ -63,8 +61,7 @@ export const normalRoutes = [
   {
     title: "Report Details",
     url: "/report-details",
-    page: <GlobalLayout page={<ReportDetails/>} />,
-
+    page: <GlobalLayout page={<ReportDetails />} />,
   },
 
   // {
@@ -76,14 +73,11 @@ export const normalRoutes = [
   {
     title: "Item Details",
     url: "/item-details/:id",
-    page: <GlobalLayout page={<ItemDetails/>} />,
-
+    page: <GlobalLayout page={<ItemDetails />} />,
   },
   {
     title: "Settings",
     url: "/settings",
-    page: <GlobalLayout page={<Settings/>} />,
-
+    page: <GlobalLayout page={<Settings />} />,
   },
-  
 ];

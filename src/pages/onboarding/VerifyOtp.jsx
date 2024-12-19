@@ -1,18 +1,130 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { login } from "../../assets/export";
-import AuthInput from "../../components/onboarding/AuthInput";
 import AuthSubmitBtn from "../../components/onboarding/AuthSubmitBtn";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { BiArrowBack } from "react-icons/bi";
+import axios from "axios";
+import { BASE_URL } from "../../api/api";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
+import { toast } from "react-toastify";
 
 const VerifyOtp = () => {
+  const [otp, setOtp] = useState(["", "", "", ""]);
   const { navigate } = useContext(GlobalContext);
+  const [loading, setLoading] = useState(false);
+
+  const inputRefs = useRef([]);
+  inputRefs.current = [];
+
+  const handleChange = (e, index) => {
+    const value = e.target.value;
+
+    // Handle valid digits (0-9)
+    if (/^[0-9]$/.test(value)) {
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
+
+      // Move to the next input field if not the last one
+      if (index < otp.length - 1) {
+        inputRefs.current[index + 1].focus();
+      }
+    }
+  };
+
+  const handlePaste = (e) => {
+    const pastedValue = e.clipboardData.getData("Text");
+
+    // Ensure the pasted value is exactly 4 digits
+    if (/^\d{4}$/.test(pastedValue)) {
+      setOtp(pastedValue.split("")); // Split string into an array
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace") {
+      if (otp[index] !== "") {
+        // If there is a value in the input, remove it
+        const newOtp = [...otp];
+        newOtp[index] = "";
+        setOtp(newOtp);
+      } else if (index > 0) {
+        // If the current input is empty and backspace is pressed, move focus to the previous field
+        inputRefs.current[index - 1].focus();
+      }
+    }
+  };
+  const generateDeviceId = () => {
+    const rawId = `${navigator.userAgent}-${navigator.platform}-${navigator.language}`;
+    return CryptoJS.MD5(rawId).toString();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const id = generateDeviceId();
+      const otpNumber = Number(otp.join(""));
+      const res = await axios.post(
+        `${BASE_URL}/admin/auth/verifyOTP`,
+        {
+          email: JSON.parse(Cookies.get("adminEmail")),
+          otp: otpNumber,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            deviceModel: navigator.userAgent,
+            deviceuniqueid: id,
+          },
+        }
+      );
+      console.log("otp verification res >>>>", res);
+      if (res?.data?.success) {
+        toast.success("OTP Verified");
+        navigate("/update-password");
+      }
+    } catch (error) {
+      console.log("err while verifying otp >>>", error?.response?.data);
+      toast.error("An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResentOtp = async () => {
+    try {
+      const id = generateDeviceId();
+      const res = await axios.post(
+        `${BASE_URL}/admin/auth/resendOTP`,
+        {
+          email: JSON.parse(Cookies.get("adminEmail")),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            deviceModel: navigator.userAgent,
+            deviceuniqueid: id,
+          },
+        }
+      );
+      console.log("resent otp res >>>", res?.data);
+      if (res?.data?.success) {
+        toast.success("OTP sent successfully");
+      }
+    } catch (error) {
+      console.log("err while resent otp >>>", error);
+    }
+  };
+
   const arr = [1, 2, 3, 4];
+
   return (
     <div className="w-screen h-screen flex items-start justify-start">
       <form
-        onSubmit={() => navigate("/update-password")}
-        className="w-full lg:w-1/2 h-full bg-[#001229] px-4 py-8 lg:p-20 z-10 flex flex-col overflow-y-auto justify-start items-center gap-8"
+        onSubmit={handleSubmit}
+        className="w-full lg:w-1/2 h-full bg-[#001229] px-4 py-8 lg:p-20 z-10 flex flex-col overflow-y-auto justify-start items-start gap-8"
       >
         <button
           onClick={() => navigate(-1)}
@@ -26,36 +138,52 @@ const VerifyOtp = () => {
             Verification
           </h1>
           <p className=" font-normal text-[16px] text-white leading-[21.6px] tracking-[-1.2px]">
-          Enter the code we sent to your email          </p>
+            Enter the code we sent to your email{" "}
+          </p>
         </div>
-        <div className="w-full h-auto flex justify-start items-center gap-4 my-4 ">
-          {arr.map((item) => {
-            return (
-              <input
+
+        <div className="w-full flex justify-between lg:w-[430px] items-center gap-4 my-4">
+          {arr.map((item, index) => (
+            <input
               key={item}
               type="number"
-              className="w-[68px] h-[68px] rounded-lg bg-transparent outline-none text-center border-[1px] border-[#EF1C68] text-[#EF1C68] text-2xl focus-within:border-[#EF1C68] flex items-center justify-center appearance-none -moz-appearance-none -webkit-appearance-none"
+              value={otp[index]}
+              onChange={(e) => handleChange(e, index)}
+              onPaste={handlePaste}
+              onKeyDown={(e) => handleKeyDown(e, index)} // Add keydown handler
+              ref={(el) => (inputRefs.current[index] = el)} // Assign ref to input
+              className="w-16 h-16 rounded-lg bg-transparent outline-none text-center border-[1px] border-[#EF1C68] text-[#EF1C68] text-2xl focus-within:border-[#EF1C68] flex items-center justify-center appearance-none otpInput"
               min="0"
               step="1"
               inputMode="numeric"
             />
-            
-            );
-          })}
+          ))}
         </div>
 
-        <AuthSubmitBtn text={"Verify"} />
-        <div className="w-full h-auto flex   flex-col gap-1 justify-start items-start  ">
-          <div className="w-full lg:w-[434px] flex gap-1 justify-center items-center ">
+        <div className="w-full h-auto flex flex-col gap-1 justify-start items-start  ">
+          <button
+            type="submit"
+            className="w-full h-[52px] lg:w-[434px] bg-[#EF1C68] text-white rounded-[12px] flex items-center justify-center text-[16px] font-bold leading-[21.6px] tracking-[-0.24px]"
+          >
+            {loading ? "Verifying..." : "Verify"}
+          </button>
+        </div>
+        <div className="w-full h-auto flex flex-col gap-1 justify-start items-start">
+          <div className="w-full lg:w-[434px] flex gap-1 justify-center items-center">
             <span className="text-[13px] font-medium text-[#C2C6CB]">
-              Didn't recieve a code?
+              Didn't receive a code?
             </span>
-            <button className="outline-none text-[13px] border-none text-[#EF1C68] font-bold">
+            <button
+              type="button"
+              onClick={() => handleResentOtp()}
+              className="outline-none text-[13px] border-none text-[#EF1C68] font-bold"
+            >
               Resend now
             </button>
           </div>
         </div>
       </form>
+
       <div className="w-1/2 lg:flex hidden relative h-full">
         <span className="w-16 h-full bg-black/50 blur-xl absolute top-0 -left-4"></span>
         <img src={login} alt="auth_mockup" className="w-full h-full" />

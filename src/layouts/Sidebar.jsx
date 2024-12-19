@@ -4,6 +4,7 @@ import { logo } from "../assets/export";
 import { sidebarArr } from "../constants/sidebarArr";
 import SidebarLink from "./SidebarLink";
 import { RiLogoutCircleLine, RiMenuLine } from "react-icons/ri";
+import Cookies from "js-cookie";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -15,6 +16,14 @@ const Sidebar = () => {
 
   const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    Cookies.remove("admin");
+    localStorage.removeItem("token");
+    localStorage.removeItem("admin");
+    navigate("/login");
   };
 
   return (
@@ -29,8 +38,8 @@ const Sidebar = () => {
 
       {/* Sidebar Container */}
       <div
-  className={`fixed lg:static top-0 left-0 w-[260px] bg-[#001229] transition-transform py-4 px-2 flex flex-col justify-start items-left pl-8 duration-300 shadow-lg p-6 border-b  border-r border-gray-700 text-white items-center hover:bg-[#001229] ${
-    isDrawerOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed lg:static top-0 left-0 w-[260px] bg-[#001229] transition-transform py-4 px-2 flex flex-col justify-start items-left pl-8 duration-300 shadow-lg p-6 border-b  border-r border-gray-700 text-white items-center hover:bg-[#001229] ${
+          isDrawerOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 z-40 h-screen overflow-y-auto`}
       >
         <Link to="/" onClick={handleCloseDrawer}>
@@ -39,13 +48,18 @@ const Sidebar = () => {
 
         <div className="w-full mt-6 flex flex-col justify-start items-start gap-3">
           {sidebarArr?.map((link, index) => (
-            <SidebarLink key={index} link={link} onCloseDrawer={handleCloseDrawer} />
+            <SidebarLink
+              key={index}
+              link={link}
+              onCloseDrawer={handleCloseDrawer}
+            />
           ))}
           <button
-            onClick={() => {
-              navigate("/login", "Home");
-              handleCloseDrawer();
-            }}
+            // onClick={() => {
+            //   navigate("/login", "Home");
+            //   handleCloseDrawer();
+            // }}
+            onClick={() => handleLogout()}
             className={`w-full h-[46px] outline-none rounded-[12px] 
             bg-transparent text-white/50 
             font-medium flex items-center justify-start transition-all duration-500 hover:bg-gradient-to-r from-[#EF1C68] to-gray-900 hover:text-white px-3 gap-2`}

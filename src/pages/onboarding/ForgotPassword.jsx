@@ -1,14 +1,57 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { login } from "../../assets/export";
-import AuthInput from "../../components/onboarding/AuthInput";
-import AuthSubmitBtn from "../../components/onboarding/AuthSubmitBtn";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import { FaApple, FaFacebookF, FaGoogle } from "react-icons/fa";
 import { BiArrowBack } from "react-icons/bi";
+import axios from "axios";
+import { BASE_URL } from "../../api/api";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
+import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const { navigate } = useContext(GlobalContext);
-  const arr = [1, 2, 3, 4, 5, 6];
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const generateDeviceId = () => {
+    const rawId = `${navigator.userAgent}-${navigator.platform}-${navigator.language}`;
+    return CryptoJS.MD5(rawId).toString();
+  };
+
+  const handleValidateEmail = async () => {
+    if (!email) {
+      alert("Enter you email address");
+      return;
+    }
+    setLoading(true);
+    try {
+      const id = generateDeviceId();
+      const res = await axios.post(
+        `${BASE_URL}/admin/auth/forgot`,
+        {
+          email: email,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            deviceModel: navigator.userAgent,
+            deviceuniqueid: id,
+          },
+        }
+      );
+      Cookies.set("adminEmail", JSON.stringify(email));
+      console.log("email res >>>", res?.data);
+      if (res?.data?.success) {
+        toast.success("OTP has been sent you email address");
+        navigate("/verify-otp");
+      }
+    } catch (error) {
+      console.log("error while validating email >>>", error?.response?.data);
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="w-screen h-screen flex items-start justify-start">
       <form
@@ -34,23 +77,36 @@ const ForgotPassword = () => {
           </p>
         </div>
         <div className="w-full h-auto flex flex-col my-4 justify-start items-start gap-4">
-          <AuthInput
-            text={"Email"}
-            placeholder={"Type your email here"}
-            type={"text"}
-          />
+          <div className="w-full h-auto flex   flex-col gap-1 justify-start items-start">
+            <label className="ml-1 text-sm font-medium text-[#fff] capitalize">
+              Email
+            </label>
+            <div
+              className={`w-full h-[52px] lg:w-[434px] focus-within:border-[1px] focus-within:border-[#EF1C68] rounded-[12px] bg-[#1A293D] flex items-center justify-start   `}
+            >
+              <div
+                className={` w-full  h-full flex items-center justify-center    rounded-[12px] relative`}
+              >
+                <input
+                  type={"email"}
+                  placeholder={"Enter your email"}
+                  className="w-full outline-none  rounded-[12px] placeholder:text-[13px] placeholder:font-normal placeholder:text-[#6B737E] text-white bg-transparent h-full px-3 text-sm font-medium "
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <AuthSubmitBtn text={"Continue"} />
         <div className="w-full h-auto flex   flex-col gap-1 justify-start items-start  ">
-          <div className="w-full lg:w-[434px] flex gap-1 justify-center items-center ">
-            <span className="text-[13px] font-medium text-[#C2C6CB]">
-              Didn't recieve a code?
-            </span>
-            <button className="outline-none text-[13px] border-none text-[#199BD1] font-bold">
-              Resend now
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleValidateEmail}
+            className="w-full h-[52px] lg:w-[434px] bg-[#EF1C68] text-white rounded-[12px] flex items-center justify-center text-[16px] font-bold leading-[21.6px] tracking-[-0.24px]"
+          >
+            Continue
+          </button>
         </div>
       </form>
       <div className="w-1/2 lg:flex hidden relative h-full">
