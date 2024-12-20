@@ -1,20 +1,27 @@
-import ForgotPassword from "../pages/onboarding/ForgotPassword";
-import Login from "../pages/onboarding/Login";
-import VerifyOtp from "../pages/onboarding/VerifyOtp";
-import UpdatePassword from "../pages/onboarding/UpdatePassword";
-import GlobalLayout from "../layouts/GlobalLayout";
-import Home from "../pages/dashboard/Home";
-import NotificationsPage from "../pages/notifications/NotificationsPage";
-import Users from "../pages/users/Users";
-import Events from "../pages/events/Events";
-import UsersInfo from "../pages/users/UsersInfo";
-import Items from "../pages/Items/Items";
-import EventDetails from "../pages/events/EventDetails";
-import Reports from "../pages/reports/Reports";
-import ReportDetails from "../pages/reports/ReportDetails";
-import Subscription from "../pages/subscriptions/Subscription";
-import ItemDetails from "../pages/Items/ItemDetails";
-import Settings from "../pages/settings/Settings";
+const ForgotPassword = React.lazy(() =>
+  import("../pages/onboarding/ForgotPassword")
+);
+const Login = React.lazy(() => import("../pages/onboarding/Login"));
+const VerifyOtp = React.lazy(() => import("../pages/onboarding/VerifyOtp"));
+const UpdatePassword = React.lazy(() =>
+  import("../pages/onboarding/UpdatePassword")
+);
+const GlobalLayout = React.lazy(() => import("../layouts/GlobalLayout"));
+const Home = React.lazy(() => import("../pages/dashboard/Home"));
+const NotificationsPage = React.lazy(() =>
+  import("../pages/notifications/NotificationsPage")
+);
+const Users = React.lazy(() => import("../pages/users/Users"));
+const Events = React.lazy(() => import("../pages/events/Events"));
+const UsersInfo = React.lazy(() => import("../pages/users/UsersInfo"));
+const Items = React.lazy(() => import("../pages/Items/Items"));
+const EventDetails = React.lazy(() => import("../pages/events/EventDetails"));
+const Reports = React.lazy(() => import("../pages/reports/Reports"));
+const ReportDetails = React.lazy(() =>
+  import("../pages/reports/ReportDetails")
+);
+const ItemDetails = React.lazy(() => import("../pages/Items/ItemDetails"));
+const Settings = React.lazy(() => import("../pages/settings/Settings"));
 import { Navigate, Route, Routes } from "react-router-dom";
 import Cookies from "js-cookie";
 

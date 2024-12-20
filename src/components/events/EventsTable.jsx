@@ -26,7 +26,6 @@ const EventsTable = () => {
 
     return formattedDate;
   };
-  console.log(DateFormat());
 
   const fetchEvents = async () => {
     const token = Cookies.get("token");

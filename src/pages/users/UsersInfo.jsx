@@ -60,7 +60,6 @@ const UsersInfo = () => {
 
     return formattedDate;
   };
-  console.log(DateFormat());
 
   const [
     suspendUser,
