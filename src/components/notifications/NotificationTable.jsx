@@ -7,11 +7,11 @@ const NotificationTable = ({ data, handleDeleteNotification }) => {
       <h2 className="text-2xl font-semibold mb-4 text-white">
         Sent Notifications
       </h2>
-      {data && data?.data?.length === 0 ? (
+      {data && data?.length === 0 ? (
         <p className="text-gray-400">No notifications sent yet.</p>
       ) : (
         <ul className="space-y-3">
-          {data?.data?.map((notification) => (
+          {data?.map((notification) => (
             <motion.li
               key={notification.notificationID}
               initial={{ opacity: 0, y: -20 }}

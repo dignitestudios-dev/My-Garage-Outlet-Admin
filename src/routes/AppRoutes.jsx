@@ -12,7 +12,6 @@ import Items from "../pages/Items/Items";
 import EventDetails from "../pages/events/EventDetails";
 import Reports from "../pages/reports/Reports";
 import ReportDetails from "../pages/reports/ReportDetails";
-import Subscription from "../pages/subscriptions/Subscription";
 import ItemDetails from "../pages/Items/ItemDetails";
 import Settings from "../pages/settings/Settings";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -20,7 +19,6 @@ import Cookies from "js-cookie";
 
 const isAuthenticated = () => {
   return Cookies.get("token") !== undefined;
-  // return ACCESS_TOKEN !== undefined && ACCESS_TOKEN !== null;
 };
 
 const AuthRoute = ({ element, redirectTo }) => {

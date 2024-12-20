@@ -1,25 +1,20 @@
 import React, { useContext, useState } from "react";
 import { login } from "../../assets/export";
-import AuthInput from "../../components/onboarding/AuthInput";
-import AuthSubmitBtn from "../../components/onboarding/AuthSubmitBtn";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import { FaApple, FaFacebookF, FaGoogle } from "react-icons/fa";
-import { Formik, Form, Field, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import axios from "axios";
-import { BASE_URL } from "../../api/api";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { toast } from "react-toastify";
-
-const SignupSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-});
+import ButtonLoader from "../../layouts/ButtonLoader";
 
 const Login = () => {
   const { navigate } = useContext(GlobalContext);
   const [isPassVisible, setIsPassVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const generateDeviceId = () => {
     const rawId = `${navigator.userAgent}-${navigator.platform}-${navigator.language}`;
     return CryptoJS.MD5(rawId).toString();
@@ -40,6 +35,7 @@ const Login = () => {
         .required("Email address is required"),
     }),
     onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
       try {
         const id = generateDeviceId();
         const res = await axios.post(
@@ -66,9 +62,11 @@ const Login = () => {
             JSON.stringify(res?.data?.data?.accessToken)
           );
           navigate("/");
+          resetForm();
         }
       } catch (error) {
         toast.error(error?.response?.data?.message);
+        resetForm();
         if (error.response) {
           console.error("Error response data:", error.response.data);
         } else if (error.request) {
@@ -76,6 +74,8 @@ const Login = () => {
         } else {
           console.error("Error message:", error.message);
         }
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -138,7 +138,7 @@ const Login = () => {
                 >
                   <input
                     type={isPassVisible ? "text" : "password"}
-                    placeholder={"placeholder"}
+                    placeholder={"Password"}
                     id="password"
                     name="password"
                     className="w-full outline-none rounded-[12px] placeholder:text-[13px] placeholder:font-normal placeholder:text-[#6B737E] text-white bg-transparent h-full px-3 text-sm font-medium"
@@ -181,7 +181,7 @@ const Login = () => {
             type="submit"
             className="w-full h-[52px] lg:w-[434px] bg-[#EF1C68] text-white rounded-[12px] flex items-center justify-center text-[16px] font-bold leading-[21.6px] tracking-[-0.24px]"
           >
-            Login
+            {loading ? <ButtonLoader /> : "Login"}
           </button>
         </div>
         <div className="w-full h-auto flex   flex-col gap-1 justify-start items-start  "></div>

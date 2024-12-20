@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 import { motion } from "framer-motion";
-
 import NotificationTable from "../../components/notifications/NotificationTable";
 import NotificationModal from "../../components/notifications/NotificationModal";
 import { BASE_URL } from "../../api/api";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import Loader from "../../components/global/Loader";
 
 const NotificationsPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -22,6 +22,7 @@ const NotificationsPage = () => {
   const [message, setMessage] = useState("");
   const [userType, setUserType] = useState("");
   const [loading, setLoading] = useState(false);
+  const [creatingNotification, setCreatingNotification] = useState(false);
 
   const fetchNotifications = async () => {
     const token = Cookies.get("token");
@@ -35,7 +36,7 @@ const NotificationsPage = () => {
           },
         }
       );
-      console.log(res);
+      // console.log(res);
       setData(res?.data);
     } catch (error) {
       console.log("err while fetching notifications >>", error);
@@ -48,6 +49,10 @@ const NotificationsPage = () => {
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+  const unreadNotifications = data?.data.filter(
+    (notification) => !notification.isViewed
+  );
 
   const handleSubmit = async () => {
     if (!title) {
@@ -63,7 +68,7 @@ const NotificationsPage = () => {
       return;
     }
     const token = Cookies.get("token");
-    setLoading(true);
+    setCreatingNotification(true);
     try {
       const response = await axios.post(
         `${BASE_URL}/admin/notification/createAndSendNotification?userType=${userType}`,
@@ -87,15 +92,15 @@ const NotificationsPage = () => {
       console.error("Error creating notification:", error);
       toast.error("Failed to create notification.");
     } finally {
-      setLoading(false);
+      setCreatingNotification(false);
     }
   };
 
   const handleDeleteNotification = async (id) => {
     const token = Cookies.get("token");
     try {
-      const res = await axios.delete(
-        `${BASE_URL}/admin/notification/deleteNotification/${id}`,
+      const res = await axios.get(
+        `${BASE_URL}/admin/notification/readNotification/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -129,10 +134,14 @@ const NotificationsPage = () => {
           Create Notification
         </motion.button>
 
-        <NotificationTable
-          data={data}
-          handleDeleteNotification={handleDeleteNotification}
-        />
+        {loading ? (
+          <Loader />
+        ) : (
+          <NotificationTable
+            data={unreadNotifications}
+            handleDeleteNotification={handleDeleteNotification}
+          />
+        )}
 
         {showModal && (
           <NotificationModal
@@ -150,7 +159,7 @@ const NotificationsPage = () => {
             userType={userType}
             setUserType={setUserType}
             handleSubmit={handleSubmit}
-            loading={loading}
+            loading={creatingNotification}
           />
         )}
       </main>

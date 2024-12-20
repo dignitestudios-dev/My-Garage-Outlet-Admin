@@ -23,7 +23,6 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log("home data >>>", res?.data);
       setData(res?.data);
     } catch (error) {
       toast.error("Semething went wrong");

@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { toast } from "react-toastify";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
+import ButtonLoader from "../../layouts/ButtonLoader";
 
 const UpdatePassword = () => {
   const { navigate } = useContext(GlobalContext);
@@ -25,8 +26,6 @@ const UpdatePassword = () => {
     const rawId = `${navigator.userAgent}-${navigator.platform}-${navigator.language}`;
     return CryptoJS.MD5(rawId).toString();
   };
-  const adminEmail = JSON.parse(Cookies.get("adminEmail"));
-  console.log(adminEmail);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -165,12 +164,12 @@ const UpdatePassword = () => {
           </div>
         </div>
 
-        <div className="w-full h-auto flex   flex-col gap-1 justify-start items-start  ">
+        <div className="w-full h-auto flex flex-col gap-1 justify-start items-start  ">
           <button
             type="submit"
             className="w-full h-[52px] lg:w-[434px] bg-[#EF1C68] text-white rounded-[12px] flex items-center justify-center text-[16px] font-bold leading-[21.6px] tracking-[-0.24px]"
           >
-            {loading ? "Updating..." : "Update"}
+            {loading ? <ButtonLoader /> : "Update"}
           </button>
         </div>
         {isUpdated && (

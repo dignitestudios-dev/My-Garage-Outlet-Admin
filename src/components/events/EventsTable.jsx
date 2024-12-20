@@ -8,7 +8,8 @@ import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
-// import moment from "moment";
+import moment from "moment";
+import Loader from "../global/Loader";
 
 const EventsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,37 +17,40 @@ const EventsTable = () => {
   const [selectedEvents, setSelectedEvents] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeFilter, setActiveFilter] = useState("all");
   const navigate = useNavigate();
   const [pagination, setPagination] = useState(null);
   const [dateFilter, setDateFilter] = useState("all");
   const [loading, setLoading] = useState(false);
-  // const DateFormat = () => {
-  //   const formattedDate = moment().format("YYYY-MM-DD");
+  const DateFormat = () => {
+    const formattedDate = moment().format("YYYY-MM-DD");
 
-  //   return formattedDate;
-  // };
+    return formattedDate;
+  };
 
   const fetchEvents = async () => {
     const token = Cookies.get("token");
     setLoading(true);
-    console.log(
-      `${BASE_URL}/admin/event/viewAllEvents?time=${dateFilter}&page=${currentPage}&limit=10`
-    );
+
     try {
       const res = await axios.get(
-        `${BASE_URL}/admin/event/viewAllEvents?time=${dateFilter}&page=${currentPage}&limit=10`,
+        `${BASE_URL}/admin/event/viewAllEvents?search=&page=${currentPage}&limit=10`,
         {
+          // params: {
+          //   time: dateFilter,
+          //   page: currentPage,
+          //   limit: 10,
+          //   search: searchTerm,
+          // },
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log(res?.data?.data);
+
       setFilteredEvents(res?.data?.data);
       setPagination(res?.data?.pagination);
     } catch (error) {
-      console.log("Error fetching events:", error?.response?.data);
+      console.error("Error fetching events:", error?.response?.data);
     } finally {
       setLoading(false);
     }
@@ -56,17 +60,18 @@ const EventsTable = () => {
     fetchEvents();
   }, [currentPage, searchTerm, dateFilter]);
 
-  const handleSearch = (e) => {
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
-
-    const filtered = filteredEvents.filter(
-      (event) =>
-        event?.title.toLowerCase().includes(term) ||
-        event?.creatorName.toLowerCase().includes(term)
-    );
-    setFilteredEvents(filtered);
-  };
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = filteredEvents.filter(
+        (event) =>
+          event?.title.toLowerCase().includes(searchTerm) ||
+          event?.creatorName.toLowerCase().includes(searchTerm)
+      );
+      setFilteredEvents(filtered);
+    } else {
+      setFilteredEvents(filteredEvents);
+    }
+  }, [searchTerm, filteredEvents]);
 
   const handleConfirmDelete = () => {
     const remainingEvents = filteredEvents.filter(
@@ -101,7 +106,8 @@ const EventsTable = () => {
             placeholder="Search..."
             className="bg-gray-800 bg-opacity-50 border border-gray-700 backdrop-blur-md shadow-lg rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             value={searchTerm}
-            onChange={handleSearch}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            // onChange={handleSearch}
           />
           <CiSearch
             className="absolute left-3 top-2.5 text-gray-400"
@@ -148,76 +154,85 @@ const EventsTable = () => {
       )}
 
       {/* Events */}
-      {filteredEvents?.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {filteredEvents?.map((event) => (
-            <motion.div
-              key={event?.eventID}
-              className="bg-gray-900 bg-opacity-50 border border-gray-700 p-6 rounded-lg shadow-lg relative hover:scale-105 transform transition-all duration-300"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="w-full h-48 overflow-hidden rounded-lg shadow-md">
-                <img
-                  src={event?.picture}
-                  alt={event?.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="flex justify-between mt-4 text-white">
-                <div className="flex flex-col">
-                  <h3 className="text-xl font-semibold">{event?.title}</h3>
-                  <p className="text-sm">{event?.creatorName}</p>
-                  <p className="text-sm">{event?.joinedCount} Participants</p>
-                  <p className="text-sm">
-                    {/* {DateFormat() > event?.date ? "Completed" : "Upcoming"} */}
-                    {event?.date}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end">
-                  <p
-                    className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                      event?.isEnded
-                        ? "bg-green-600 text-green-100"
-                        : "bg-gray-600 text-gray-100"
-                    }`}
-                  >
-                    {event?.isEnded ? "Completed" : "Upcoming"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between mt-4">
-                <button
-                  onClick={() => navigate(`/event-details/${event?.eventID}`)}
-                  className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
-                >
-                  View Details
-                </button>
-                <button
-                  onClick={() => toggleSelectEvent(event.eventID)}
-                  className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${
-                    selectedEvents.has(event.eventID)
-                      ? "text-white black bg-gray-700"
-                      : "text-white hover:bg-gray-700"
-                  }`}
-                >
-                  {selectedEvents.has(event.eventID) ? (
-                    <FaCheckCircle size={20} />
-                  ) : (
-                    <FaCheck size={20} />
-                  )}
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      {loading ? (
+        <Loader />
       ) : (
-        <div className="w-full py-4 text-center">
-          <h2 className="text-gray-300">No Events</h2>
-        </div>
+        <>
+          {filteredEvents?.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {filteredEvents?.map((event) => (
+                <motion.div
+                  key={event?.eventID}
+                  className="bg-gray-900 bg-opacity-50 border border-gray-700 p-6 rounded-lg shadow-lg relative hover:scale-105 transform transition-all duration-300"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="w-full h-48 overflow-hidden rounded-lg shadow-md">
+                    <img
+                      src={event?.picture}
+                      alt={event?.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="flex justify-between mt-4 text-white">
+                    <div className="flex flex-col">
+                      <h3 className="text-xl font-semibold">{event?.title}</h3>
+                      <p className="text-sm">{event?.creatorName}</p>
+                      <p className="text-sm">
+                        {event?.joinedCount} Participants
+                      </p>
+                      <p className="text-sm">
+                        {DateFormat() > event?.date ? "Completed" : "Upcoming"}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <p
+                        className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                          event?.isEnded
+                            ? "bg-green-600 text-green-100"
+                            : "bg-gray-600 text-gray-100"
+                        }`}
+                      >
+                        {event?.isEnded ? "Completed" : "Upcoming"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-4">
+                    <button
+                      onClick={() =>
+                        navigate(`/event-details/${event?.eventID}`)
+                      }
+                      className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
+                    >
+                      View Details
+                    </button>
+                    <button
+                      onClick={() => toggleSelectEvent(event.eventID)}
+                      className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${
+                        selectedEvents.has(event.eventID)
+                          ? "text-white black bg-gray-700"
+                          : "text-white hover:bg-gray-700"
+                      }`}
+                    >
+                      {selectedEvents.has(event.eventID) ? (
+                        <FaCheckCircle size={20} />
+                      ) : (
+                        <FaCheck size={20} />
+                      )}
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full py-4 text-center">
+              <h2 className="text-gray-300">No Events</h2>
+            </div>
+          )}
+        </>
       )}
 
       {/* Pagination */}

@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import { toast } from "react-toastify";
+import Loader from "../global/Loader";
 
 const ReportsTable = () => {
   const [selectedReports, setSelectedReports] = useState(new Set());
@@ -18,8 +19,10 @@ const ReportsTable = () => {
   const [page, setPage] = useState(1);
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const fetchReports = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(
         `${BASE_URL}/admin/report/viewAllReports?type=${reportType}&search=&page=${page}&limit=10`,
@@ -33,6 +36,8 @@ const ReportsTable = () => {
       setPagination(res?.data?.pagination);
     } catch (error) {
       console.log("Error fetching reports:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,83 +168,91 @@ const ReportsTable = () => {
       )}
 
       {/* Reports Table */}
-      {filteredReports?.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-700">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  <input
-                    type="checkbox"
-                    checked={selectedReports.size === filteredReports.length}
-                    onChange={toggleSelectAll}
-                    className="form-checkbox text-blue-600"
-                  />
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Report Type
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Reason
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Edit
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-gray-700">
-              {filteredReports?.map((report) => (
-                <motion.tr
-                  key={report?.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      checked={selectedReports.has(report?.reportID)}
-                      onChange={() => toggleSelectReport(report?.reportID)}
-                      className="form-checkbox text-blue-600"
-                    />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    {report?.type === "comment"
-                      ? "Comment"
-                      : report?.type === "user"
-                      ? "User"
-                      : "Event"}
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    {report?.reason}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    {report?.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    <button
-                      className="text-white mr-2"
-                      onClick={() => handleEdit(report?.reportID, report)}
-                    >
-                      <AiFillEdit size={18} />
-                    </button>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {loading ? (
+        <Loader />
       ) : (
-        <div className="w-full py-10">
-          <h2 className="text-center text-sm text-gray-400">
-            No Reports Found
-          </h2>
-        </div>
+        <>
+          {filteredReports?.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-700">
+                <thead>
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedReports.size === filteredReports.length
+                        }
+                        onChange={toggleSelectAll}
+                        className="form-checkbox text-blue-600"
+                      />
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Report Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Reason
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Edit
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-700">
+                  {filteredReports?.map((report) => (
+                    <motion.tr
+                      key={report?.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <input
+                          type="checkbox"
+                          checked={selectedReports.has(report?.reportID)}
+                          onChange={() => toggleSelectReport(report?.reportID)}
+                          className="form-checkbox text-blue-600"
+                        />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        {report?.type === "comment"
+                          ? "Comment"
+                          : report?.type === "user"
+                          ? "User"
+                          : "Event"}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        {report?.reason}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        {report?.date}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <button
+                          className="text-white mr-2"
+                          onClick={() => handleEdit(report?.reportID, report)}
+                        >
+                          <AiFillEdit size={18} />
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="w-full py-10">
+              <h2 className="text-center text-sm text-gray-400">
+                No Reports Found
+              </h2>
+            </div>
+          )}
+        </>
       )}
 
       {/* Pagination */}

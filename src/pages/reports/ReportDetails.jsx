@@ -95,7 +95,7 @@ const ReportDetails = () => {
                 {reportDetails?.reporterName}
               </div>
               {/* View Button as Link */}
-              <Link
+              {/* <Link
                 to={
                   reportDetails?.entityType === "user"
                     ? `/user-info/${reportDetails?.entityID}`
@@ -107,7 +107,7 @@ const ReportDetails = () => {
               >
                 <FaEye className="mr-2" />
                 View
-              </Link>
+              </Link> */}
             </div>
 
             <div className="text-lg text-gray-300">

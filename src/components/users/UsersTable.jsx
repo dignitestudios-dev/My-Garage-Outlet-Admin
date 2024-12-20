@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import { toast } from "react-toastify";
+import Loader from "../global/Loader";
 
 const UsersTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,7 +22,7 @@ const UsersTable = () => {
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dateFilter, setDateFilter] = useState("all");
-
+  console.log("dateFilter >>>", dateFilter);
   const fetchUsers = async () => {
     const token = Cookies.get("token");
     setLoading(true);
@@ -35,7 +36,6 @@ const UsersTable = () => {
           },
         }
       );
-      console.log(res?.data?.data);
       setFilteredUsers(res?.data?.data);
       setPagination(res?.data?.pagination);
     } catch (error) {
@@ -190,8 +190,8 @@ const UsersTable = () => {
               key={filterValue}
               onClick={() => setDateFilter(filterValue)}
               className={`px-4 py-2 text-sm ${
-                filter === filterValue
-                  ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white"
+                dateFilter === filterValue
+                  ? "bg-gray-600 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white"
                   : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"
               } rounded-md w-full sm:w-auto`}
             >
@@ -221,93 +221,101 @@ const UsersTable = () => {
       )}
 
       {/* Users Table */}
-      {filteredUsers?.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-700">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  <input
-                    type="checkbox"
-                    checked={selectedUsers?.size === filteredUsers?.length}
-                    onChange={toggleSelectAll}
-                    className="form-checkbox text-blue-600"
-                  />
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Subscriber
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Edit
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-gray-700">
-              {filteredUsers?.map((user) => (
-                <motion.tr
-                  key={user.userID}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      checked={selectedUsers.has(user?.userID)}
-                      onChange={() => toggleSelectUser(user?.userID)}
-                      className="form-checkbox text-blue-600"
-                    />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <img
-                          src={user?.profilePicture}
-                          alt={user?.name}
-                          className="h-10 w-10 rounded-full"
-                        />
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-100">
-                          {user?.name}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        user?.isSubscriptionPaid
-                          ? "bg-green-800 text-green-100"
-                          : "bg-red-800 text-red-100"
-                      }`}
-                    >
-                      {user?.isSubscriptionPaid ? "Subscribed" : "Unsubscribed"}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    <button
-                      className="text-white mr-2"
-                      onClick={() => handleEdit(user?.userID)}
-                    >
-                      <AiFillEdit size={18} />
-                    </button>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {loading ? (
+        <Loader />
       ) : (
-        <div className="w-full">
-          <h2>No Users</h2>
-        </div>
+        <>
+          {filteredUsers?.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-700">
+                <thead>
+                  <tr>
+                    {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      <input
+                        type="checkbox"
+                        checked={selectedUsers?.size === filteredUsers?.length}
+                        onChange={toggleSelectAll}
+                        className="form-checkbox text-blue-600"
+                      />
+                    </th> */}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Subscriber
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Edit
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-700">
+                  {filteredUsers?.map((user) => (
+                    <motion.tr
+                      key={user.userID}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {/* <td className="px-6 py-4 whitespace-nowrap">
+                        <input
+                          type="checkbox"
+                          checked={selectedUsers.has(user?.userID)}
+                          onChange={() => toggleSelectUser(user?.userID)}
+                          className="form-checkbox text-blue-600"
+                        />
+                      </td> */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <img
+                              src={user?.profilePicture}
+                              alt={user?.name}
+                              className="h-10 w-10 rounded-full"
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-100">
+                              {user?.name}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            user?.isSubscriptionPaid
+                              ? "bg-green-800 text-green-100"
+                              : "bg-red-800 text-red-100"
+                          }`}
+                        >
+                          {user?.isSubscriptionPaid
+                            ? "Subscribed"
+                            : "Unsubscribed"}
+                        </span>
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <button
+                          className="text-white mr-2"
+                          onClick={() => handleEdit(user?.userID)}
+                        >
+                          <AiFillEdit size={18} />
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="w-full py-4">
+              <h2>No Users</h2>
+            </div>
+          )}
+        </>
       )}
 
       {/* Pagination */}
@@ -320,7 +328,10 @@ const UsersTable = () => {
           Previous
         </button>
         <span className="text-sm text-white">
-          Page {pagination?.currentPage} of {pagination?.totalPages}
+          Page {pagination?.currentPage} of{" "}
+          {pagination?.totalPages === 0
+            ? pagination?.totalPages + 1
+            : pagination?.totalPages}
         </span>
         <button
           onClick={() => setPage(page + 1)}

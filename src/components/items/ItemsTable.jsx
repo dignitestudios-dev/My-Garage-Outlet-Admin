@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
+import Loader from "../global/Loader";
 
 const ItemsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,9 +20,11 @@ const ItemsTable = () => {
   const [page, setPage] = useState(1);
   const [filteredItems, setFilteredItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchItems = async () => {
     const token = Cookies.get("token");
+    setLoading(true);
     try {
       const res = await axios.get(
         `${BASE_URL}/admin/item/viewAllItems?search=&time=${dateFilter}&page=${page}&limit=12`,
@@ -36,6 +39,8 @@ const ItemsTable = () => {
       setPagination(res?.data?.pagination);
     } catch (error) {
       console.log("Error while fetching items >>>", error?.response?.data);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,29 +105,32 @@ const ItemsTable = () => {
       </div>
 
       {/* Date Filters */}
-
       <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
-        {["all", "recently joined", "last month", "this week", "this year"].map(
-          (filterValue) => (
-            <button
-              key={filterValue}
-              onClick={() => setDateFilter(filterValue)}
-              className={`px-4 py-2 text-sm ${
-                dateFilter === filterValue
-                  ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white"
-                  : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"
-              } rounded-md w-full sm:w-auto`}
-            >
-              {filterValue === "all"
-                ? "All"
-                : filterValue === "recently joined"
-                ? "Recent"
-                : filterValue
-                    .replace(/([a-z])([A-Z])/g, "$1 $2")
-                    .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
-            </button>
-          )
-        )}
+        {[
+          "all",
+          "recently created",
+          "last month",
+          "this week",
+          "this year",
+        ].map((filterValue) => (
+          <button
+            key={filterValue}
+            onClick={() => setDateFilter(filterValue)}
+            className={`px-4 py-2 text-sm ${
+              dateFilter === filterValue
+                ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white"
+                : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"
+            } rounded-md w-full sm:w-auto`}
+          >
+            {filterValue === "all"
+              ? "All"
+              : filterValue === "recently created"
+              ? "Recent"
+              : filterValue
+                  .replace(/([a-z])([A-Z])/g, "$1 $2")
+                  .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
+          </button>
+        ))}
       </div>
 
       {/* Delete Selected Items Button */}
@@ -139,61 +147,67 @@ const ItemsTable = () => {
       )}
 
       {/* Items Grid */}
-      {filteredItems?.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredItems?.map((item) => (
-            <motion.div
-              key={item?.itemID}
-              className="bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg shadow-lg p-4 flex flex-col items-center text-center relative hover:scale-105 transform transition-all duration-300"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="h-40 w-full bg-gray-200 rounded-lg mb-4">
-                <img
-                  src={`${item?.picture}`}
-                  alt={`${item?.title}`}
-                  className="object-cover w-full h-full rounded-lg"
-                />
-              </div>
-
-              <div className="text-lg font-semibold text-white mb-1">
-                {item?.title}
-              </div>
-              <div className="text-sm text-white mb-2">
-                Seller: {item?.creatorName}
-              </div>
-
-              <div className="flex items-center justify-between w-full">
-                <button
-                  onClick={() => navigate(`/item-details/${item?.itemID}`)}
-                  className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
-                >
-                  View Details
-                </button>
-
-                <button
-                  onClick={() => toggleSelectItem(item?.itemID)}
-                  className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${
-                    selectedItems.has(item?.itemID)
-                      ? "bg-gray-700 text-white"
-                      : "hover:bg-gray-700 text-white"
-                  }`}
-                >
-                  {selectedItems.has(item?.itemID) ? (
-                    <FaCheckCircle size={20} />
-                  ) : (
-                    <FaCheck size={20} />
-                  )}
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      {loading ? (
+        <Loader />
       ) : (
-        <div className="w-full py-4 text-center">
-          <h2 className="text-gray-400">No Items Found</h2>
-        </div>
+        <>
+          {filteredItems?.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredItems?.map((item) => (
+                <motion.div
+                  key={item?.itemID}
+                  className="bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg shadow-lg p-4 flex flex-col items-center text-center relative hover:scale-105 transform transition-all duration-300"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="h-40 w-full bg-gray-200 rounded-lg mb-4">
+                    <img
+                      src={`${item?.picture}`}
+                      alt={`${item?.title}`}
+                      className="object-cover w-full h-full rounded-lg"
+                    />
+                  </div>
+
+                  <div className="text-lg font-semibold text-white mb-1">
+                    {item?.title}
+                  </div>
+                  <div className="text-sm text-white mb-2">
+                    Seller: {item?.creatorName}
+                  </div>
+
+                  <div className="flex items-center justify-between w-full">
+                    <button
+                      onClick={() => navigate(`/item-details/${item?.itemID}`)}
+                      className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
+                    >
+                      View Details
+                    </button>
+
+                    <button
+                      onClick={() => toggleSelectItem(item?.itemID)}
+                      className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${
+                        selectedItems.has(item?.itemID)
+                          ? "bg-gray-700 text-white"
+                          : "hover:bg-gray-700 text-white"
+                      }`}
+                    >
+                      {selectedItems.has(item?.itemID) ? (
+                        <FaCheckCircle size={20} />
+                      ) : (
+                        <FaCheck size={20} />
+                      )}
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full py-4 text-center">
+              <h2 className="text-gray-400">No Items Found</h2>
+            </div>
+          )}
+        </>
       )}
 
       {/* Pagination */}

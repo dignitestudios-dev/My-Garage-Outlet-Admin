@@ -7,6 +7,7 @@ import { BASE_URL } from "../../api/api";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { toast } from "react-toastify";
+import ButtonLoader from "../../layouts/ButtonLoader";
 
 const ForgotPassword = () => {
   const { navigate } = useContext(GlobalContext);
@@ -105,7 +106,7 @@ const ForgotPassword = () => {
             onClick={handleValidateEmail}
             className="w-full h-[52px] lg:w-[434px] bg-[#EF1C68] text-white rounded-[12px] flex items-center justify-center text-[16px] font-bold leading-[21.6px] tracking-[-0.24px]"
           >
-            Continue
+            {loading ? <ButtonLoader /> : "Continue"}
           </button>
         </div>
       </form>
