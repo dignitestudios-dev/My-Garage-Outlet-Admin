@@ -15,7 +15,6 @@ import Cookies from "js-cookie";
 import Loader from "../../components/global/Loader";
 import { toast } from "react-toastify";
 // import moment from "moment";
-import opencage from "opencage-api-client";
 
 const mockEventHistory = [
   {
