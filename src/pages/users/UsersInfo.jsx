@@ -50,7 +50,7 @@ const UsersInfo = () => {
   const [eventFilter, setEventFilter] = useState("All");
   const [isEventsActive, setIsEventsActive] = useState(true);
   const [suspensionReason, setSuspensionReason] = useState("");
-  const { data, error, isLoading } = useFetchUserQuery({
+  const { data, error, isLoading, refetch } = useFetchUserQuery({
     userId: id,
     eventType: "all",
   });
@@ -90,9 +90,9 @@ const UsersInfo = () => {
     //   : { suspensionReason };
 
     try {
-      const res = await axios.get(
+      const res = await axios.post(
         url,
-        // { suspensionReason },
+        { suspensionReason },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -101,6 +101,7 @@ const UsersInfo = () => {
       );
       console.log("suspension res >>>", res);
       toast.message(res?.data?.message);
+      refetch();
       // await suspendUser({ userId: id }).unwrap();
       // console.log("User suspended successfully!");
       // toggleSuspendModal();
@@ -247,7 +248,7 @@ const UsersInfo = () => {
                     <td className="px-6 py-4">
                       {DateFormat() > event?.date ? "Completed" : "Upcoming"}
                     </td>
-                    <td className="px-6 py-4">{event?.date}</td>
+                    <td className="px-6 py-4">{event?.type}</td>
                     <td className="px-6 py-4">
                       <button
                         className="text-[#EF1C68] hover:text-[#E01C56] transition"

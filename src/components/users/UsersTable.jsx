@@ -287,7 +287,7 @@ const UsersTable = () => {
                           : "bg-red-800 text-red-100"
                       }`}
                     >
-                      {user?.isSubscriptionPaid ? "Active" : "Inactive"}
+                      {user?.isSubscriptionPaid ? "Subscribed" : "Unsubscribed"}
                     </span>
                   </td>
 

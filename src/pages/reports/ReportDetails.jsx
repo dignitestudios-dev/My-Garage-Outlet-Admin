@@ -78,21 +78,21 @@ const ReportDetails = () => {
     <div className="h-full w-full bg-[#001229] text-white flex flex-col items-center px-6 py-10 overflow-y-auto">
       <div className="w-full max-w-4xl bg-gray-800 text-gray-200 rounded-lg shadow-lg">
         <div className="p-8 space-y-6">
-          <h2 className="text-3xl font-semibold text-white mb-4">
+          <h2 className="text-3xl font-semibold text-gray-400 mb-4">
             Report Details
           </h2>
-          <p className="text-lg text-gray-400">{`Report Type: ${reportDetails?.entityType}`}</p>
+          <p className="text-lg text-gray-300">{`Report Type: ${reportDetails?.entityType}`}</p>
 
           <div className="space-y-6 mt-4">
             <div className="text-lg text-gray-300">
               <strong className="text-gray-500">Reported By:</strong>{" "}
-              {reportDetails?.reporterName}
+              {reportDetails?.creatorName}
             </div>
 
             <div className="flex items-center justify-between space-x-4 text-lg text-gray-300">
               <div>
                 <strong className="text-gray-500">Reported User:</strong>{" "}
-                {reportDetails?.reportedUserName}
+                {reportDetails?.reporterName}
               </div>
               {/* View Button as Link */}
               <Link
