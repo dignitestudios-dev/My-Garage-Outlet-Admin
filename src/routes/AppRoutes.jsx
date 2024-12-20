@@ -27,7 +27,6 @@ import Cookies from "js-cookie";
 
 const isAuthenticated = () => {
   return Cookies.get("token") !== undefined;
-  // return ACCESS_TOKEN !== undefined && ACCESS_TOKEN !== null;
 };
 
 const AuthRoute = ({ element, redirectTo }) => {
