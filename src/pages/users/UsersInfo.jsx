@@ -4,16 +4,11 @@ import EditUserModal from "../../components/users/EditUserModal";
 import DeleteUserModal from "../../components/users/DeleteUserModal";
 import SuspendUserModal from "../../components/users/SuspendUserModal";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
-import {
-  useFetchUserQuery,
-  useSuspendUserMutation,
-} from "../../features/userSlice/userSlice";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import Cookies from "js-cookie";
 import Loader from "../../components/global/Loader";
 import { toast } from "react-toastify";
-import moment from "moment";
 
 const UsersInfo = () => {
   const { id } = useParams();
@@ -28,7 +23,6 @@ const UsersInfo = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [suspending, setSuspending] = useState(false);
-  const [eventType, setEventType] = useState("all");
 
   const fetchUser = async () => {
     console.log("fetch user called");
@@ -43,7 +37,6 @@ const UsersInfo = () => {
           },
         }
       );
-      console.log("user >>>", res?.data?.data);
       setUserDetails(res?.data?.data);
     } catch (error) {
       console.log("err while fetching user >>>", error?.response?.data);
@@ -57,9 +50,13 @@ const UsersInfo = () => {
   }, [eventFilter]);
 
   const DateFormat = () => {
-    const formattedDate = moment().format("YYYY-MM-DD");
+    const date = new Date();
 
-    return formattedDate;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
   };
 
   if (loading) {

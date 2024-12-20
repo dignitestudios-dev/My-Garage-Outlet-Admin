@@ -52,7 +52,6 @@ const Login = () => {
             },
           }
         );
-        console.log("login res >>>", res?.data);
         if (res?.data?.success) {
           toast.success(res?.data?.message || "Login successful");
           Cookies.set("admin", JSON.stringify(res?.data?.data));

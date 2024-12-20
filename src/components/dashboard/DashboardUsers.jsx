@@ -179,7 +179,7 @@ const DashboardUsers = ({ homeData }) => {
                       : "bg-red-700 text-red-100"
                   }`}
                 >
-                  {user.isSubscriptionPaid ? "Subscribed" : "Not Subscribed"}
+                  {user.isSubscriptionPaid ? "Subscribed" : "Unsubscribed"}
                 </span>
               </div>
 

@@ -22,7 +22,6 @@ const UsersTable = () => {
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dateFilter, setDateFilter] = useState("all");
-  console.log("dateFilter >>>", dateFilter);
   const fetchUsers = async () => {
     const token = Cookies.get("token");
     setLoading(true);
