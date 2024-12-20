@@ -8,7 +8,7 @@ import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
-import moment from "moment";
+// import moment from "moment";
 
 const EventsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,11 +21,11 @@ const EventsTable = () => {
   const [pagination, setPagination] = useState(null);
   const [dateFilter, setDateFilter] = useState("all");
   const [loading, setLoading] = useState(false);
-  const DateFormat = () => {
-    const formattedDate = moment().format("YYYY-MM-DD");
+  // const DateFormat = () => {
+  //   const formattedDate = moment().format("YYYY-MM-DD");
 
-    return formattedDate;
-  };
+  //   return formattedDate;
+  // };
 
   const fetchEvents = async () => {
     const token = Cookies.get("token");
@@ -172,7 +172,8 @@ const EventsTable = () => {
                   <p className="text-sm">{event?.creatorName}</p>
                   <p className="text-sm">{event?.joinedCount} Participants</p>
                   <p className="text-sm">
-                    {DateFormat() > event?.date ? "Completed" : "Upcoming"}
+                    {/* {DateFormat() > event?.date ? "Completed" : "Upcoming"} */}
+                    {event?.date}
                   </p>
                 </div>
                 <div className="flex flex-col items-end">

@@ -14,7 +14,7 @@ import { BASE_URL } from "../../api/api";
 import Cookies from "js-cookie";
 import Loader from "../../components/global/Loader";
 import { toast } from "react-toastify";
-import moment from "moment";
+// import moment from "moment";
 import opencage from "opencage-api-client";
 
 const mockEventHistory = [
@@ -55,11 +55,11 @@ const UsersInfo = () => {
     eventType: "all",
   });
   console.log(data?.data);
-  const DateFormat = () => {
-    const formattedDate = moment().format("YYYY-MM-DD");
+  // const DateFormat = () => {
+  //   const formattedDate = moment().format("YYYY-MM-DD");
 
-    return formattedDate;
-  };
+  //   return formattedDate;
+  // };
 
   const [
     suspendUser,
@@ -245,7 +245,8 @@ const UsersInfo = () => {
                     <td className="px-6 py-4">{event?.title}</td>
                     <td className="px-6 py-4">{event?.date}</td>
                     <td className="px-6 py-4">
-                      {DateFormat() > event?.date ? "Completed" : "Upcoming"}
+                      {/* {DateFormat() > event?.date ? "Completed" : "Upcoming"} */}
+                      {event?.date}
                     </td>
                     <td className="px-6 py-4">{event?.type}</td>
                     <td className="px-6 py-4">
