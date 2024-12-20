@@ -33,9 +33,11 @@ const Login = () => {
     validationSchema: Yup.object({
       password: Yup.string()
         .max(15, "Must be 15 characters or less")
-        .required("Required"),
+        .required("Password is required"),
 
-      email: Yup.string().email("Invalid email address").required("Required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email address is required"),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -66,6 +68,7 @@ const Login = () => {
           navigate("/");
         }
       } catch (error) {
+        toast.error(error?.response?.data?.message);
         if (error.response) {
           console.error("Error response data:", error.response.data);
         } else if (error.request) {

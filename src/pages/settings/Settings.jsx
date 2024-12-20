@@ -59,13 +59,13 @@ const Settings = () => {
           /[^A-Za-z0-9]/,
           "New password must contain at least one special character"
         )
-        .required("New password is required")
-        .notOneOf(
-          [Yup.ref("password"), null],
-          "New password cannot be the same as the old password"
-        ), // Ensure newPassword is not the same as password
+        .required("New password is required"),
+      // .notOneOf(
+      //   [Yup.ref("password"), null],
+      //   "New password cannot be the same as the old password"
+      // ), // Ensure newPassword is not the same as password
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       const id = generateDeviceId();
       try {
@@ -86,6 +86,7 @@ const Settings = () => {
         console.log("password changes res >>>", res);
         if (res?.data?.success) {
           toast.success("Password changed successfully");
+          resetForm();
         }
       } catch (error) {
         console.log("error while changing password >>>", error?.response?.data);

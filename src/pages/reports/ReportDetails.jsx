@@ -13,24 +13,13 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import Loader from "../../components/global/Loader";
 
-const mockReportDetails = {
-  id: "R001",
-  reportType: "User", // Can be 'User', 'Event', or 'Item'
-  reporterName: "John Doe",
-  reporterEmail: "john.doe@example.com",
-  reason: "Inappropriate content",
-  // status: 'Pending', // Could be 'Pending', 'Resolved', 'Rejected'
-  dateReported: "2024-11-10",
-  reportedUsername: "jane_doe", // Mock username for the reported user
-};
-
 const ReportDetails = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [reportDetails, setReportDetails] = useState(null);
   const [loading, setLoading] = useState(false);
-  // console.log(location?.state?.report);
   const token = Cookies.get("token");
 
   const fetchReportDetails = async () => {
@@ -60,9 +49,25 @@ const ReportDetails = () => {
 
   const toggleDeleteModal = () => setIsDeleteModalOpen(!isDeleteModalOpen);
 
-  const handleDelete = () => {
-    console.log("Report deleted!");
-    toggleDeleteModal();
+  const handleDelete = async () => {
+    const token = Cookies.get("token");
+    try {
+      const res = await axios.delete(
+        `${BASE_URL}/admin/report/deleteSingleReport/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res?.data?.success) {
+        toast.success(res?.data?.message);
+        navigate("/reports");
+        toggleDeleteModal();
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
   };
 
   if (loading) {
@@ -93,8 +98,10 @@ const ReportDetails = () => {
               <Link
                 to={
                   reportDetails?.entityType === "user"
-                    ? `/user-info/${reportDetails.entityID}`
-                    : `/event-details/${mockReportDetails.id}`
+                    ? `/user-info/${reportDetails?.entityID}`
+                    : reportDetails?.entityType === "event"
+                    ? `/event-details/${reportDetails?.id}`
+                    : "/reports"
                 }
                 className="flex items-center text-blue-500 hover:text-blue-700 font-semibold"
               >
@@ -144,7 +151,7 @@ const ReportDetails = () => {
       {/* Modals */}
       {isDeleteModalOpen && (
         <DeleteReportModal
-          eventDetails={mockReportDetails}
+          eventDetails={reportDetails}
           toggleModal={toggleDeleteModal}
           handleDelete={handleDelete}
         />

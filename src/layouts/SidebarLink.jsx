@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 const SidebarLink = ({ link, onCloseDrawer }) => {
   const { navigate, activeLink } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const toggleSubmenu = () => {
     setIsOpen(!isOpen);
@@ -18,9 +20,13 @@ const SidebarLink = ({ link, onCloseDrawer }) => {
   return (
     <div className="w-full">
       <button
-        onClick={link.submenu ? toggleSubmenu : () => handleNavigation(link?.url, link?.title)}
+        onClick={
+          link.submenu
+            ? toggleSubmenu
+            : () => handleNavigation(link?.url, link?.url)
+        }
         className={`w-full h-[46px] outline-none rounded-[12px] ${
-          activeLink === link?.title
+          link?.url == location?.pathname
             ? "bg-gradient-to-r from-[#EF1C68] to-gray-900 text-white"
             : "bg-transparent text-white/50 "
         } font-medium flex items-center justify-between transition-all duration-500 hover:bg-gradient-to-r from-[#EF1C68] to-gray-900 hover:text-white px-3 gap-2`}
@@ -55,4 +61,3 @@ const SidebarLink = ({ link, onCloseDrawer }) => {
 };
 
 export default SidebarLink;
-  

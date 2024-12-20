@@ -24,7 +24,7 @@ const ItemsTable = () => {
     const token = Cookies.get("token");
     try {
       const res = await axios.get(
-        `${BASE_URL}/admin/item/viewAllItems?search=&time=${dateFilter}&page=${page}&limit=10`,
+        `${BASE_URL}/admin/item/viewAllItems?search=&time=${dateFilter}&page=${page}&limit=12`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -100,21 +100,24 @@ const ItemsTable = () => {
       </div>
 
       {/* Date Filters */}
-      <div className="flex flex-wrap justify-start items-center gap-4 mb-8">
-        {["all", "recentlyCreated", "lastMonth", "thisWeek", "thisYear"].map(
-          (filter) => (
+
+      <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
+        {["all", "recently joined", "last month", "this week", "this year"].map(
+          (filterValue) => (
             <button
-              key={filter}
-              onClick={() => setDateFilter(filter)}
-              className={`px-4 py-2 rounded-lg ${
-                dateFilter === filter
-                  ? "bg-gray-800 bg-opacity-50 text-white border border-gray-600"
-                  : "bg-gray-900 bg-opacity-50 text-white hover:bg-gray-800 border border-gray-600"
-              }`}
+              key={filterValue}
+              onClick={() => setDateFilter(filterValue)}
+              className={`px-4 py-2 text-sm ${
+                dateFilter === filterValue
+                  ? "bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white"
+                  : "bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-md p-6 border border-gray-700 text-white hover:bg-gray-800"
+              } rounded-md w-full sm:w-auto`}
             >
-              {filter === "all"
+              {filterValue === "all"
                 ? "All"
-                : filter
+                : filterValue === "recently joined"
+                ? "Recent"
+                : filterValue
                     .replace(/([a-z])([A-Z])/g, "$1 $2")
                     .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}
             </button>
@@ -136,56 +139,62 @@ const ItemsTable = () => {
       )}
 
       {/* Items Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredItems?.map((item) => (
-          <motion.div
-            key={item?.itemID}
-            className="bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg shadow-lg p-4 flex flex-col items-center text-center relative hover:scale-105 transform transition-all duration-300"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="h-40 w-full bg-gray-200 rounded-lg mb-4">
-              <img
-                src={`${item?.picture}`}
-                alt={`${item?.title}`}
-                className="object-cover w-full h-full rounded-lg"
-              />
-            </div>
+      {filteredItems?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredItems?.map((item) => (
+            <motion.div
+              key={item?.itemID}
+              className="bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg shadow-lg p-4 flex flex-col items-center text-center relative hover:scale-105 transform transition-all duration-300"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="h-40 w-full bg-gray-200 rounded-lg mb-4">
+                <img
+                  src={`${item?.picture}`}
+                  alt={`${item?.title}`}
+                  className="object-cover w-full h-full rounded-lg"
+                />
+              </div>
 
-            <div className="text-lg font-semibold text-white mb-1">
-              {item?.title}
-            </div>
-            <div className="text-sm text-white mb-2">
-              Seller: {item?.creatorName}
-            </div>
+              <div className="text-lg font-semibold text-white mb-1">
+                {item?.title}
+              </div>
+              <div className="text-sm text-white mb-2">
+                Seller: {item?.creatorName}
+              </div>
 
-            <div className="flex items-center justify-between w-full">
-              <button
-                onClick={() => navigate(`/item-details/${item?.itemID}`)}
-                className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
-              >
-                View Details
-              </button>
+              <div className="flex items-center justify-between w-full">
+                <button
+                  onClick={() => navigate(`/item-details/${item?.itemID}`)}
+                  className="px-4 py-2 bg-gray-900 bg-opacity-50 backdrop-blur-md shadow-lg p-6 border border-gray-700 text-white font-semibold rounded-md hover:bg-gray-800 transition"
+                >
+                  View Details
+                </button>
 
-              <button
-                onClick={() => toggleSelectItem(item?.itemID)}
-                className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${
-                  selectedItems.has(item?.itemID)
-                    ? "bg-gray-700 text-white"
-                    : "hover:bg-gray-700 text-white"
-                }`}
-              >
-                {selectedItems.has(item?.itemID) ? (
-                  <FaCheckCircle size={20} />
-                ) : (
-                  <FaCheck size={20} />
-                )}
-              </button>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+                <button
+                  onClick={() => toggleSelectItem(item?.itemID)}
+                  className={`p-2 rounded-lg shadow-md transition-colors duration-300 ${
+                    selectedItems.has(item?.itemID)
+                      ? "bg-gray-700 text-white"
+                      : "hover:bg-gray-700 text-white"
+                  }`}
+                >
+                  {selectedItems.has(item?.itemID) ? (
+                    <FaCheckCircle size={20} />
+                  ) : (
+                    <FaCheck size={20} />
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <div className="w-full py-4 text-center">
+          <h2 className="text-gray-400">No Items Found</h2>
+        </div>
+      )}
 
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">

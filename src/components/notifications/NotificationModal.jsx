@@ -1,12 +1,6 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { BASE_URL } from "../../api/api";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
 
 const NotificationModal = ({
-  showModal,
   setShowModal,
   newNotification,
   customField,

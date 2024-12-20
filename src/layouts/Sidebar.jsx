@@ -5,10 +5,16 @@ import { sidebarArr } from "../constants/sidebarArr";
 import SidebarLink from "./SidebarLink";
 import { RiLogoutCircleLine, RiMenuLine } from "react-icons/ri";
 import Cookies from "js-cookie";
+import LogoutModal from "./LogoutModal";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const toggleLogoutModal = () => {
+    setShowLogoutModal(!showLogoutModal);
+  };
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -18,17 +24,8 @@ const Sidebar = () => {
     setIsDrawerOpen(false);
   };
 
-  const handleLogout = () => {
-    Cookies.remove("token");
-    Cookies.remove("admin");
-    localStorage.removeItem("token");
-    localStorage.removeItem("admin");
-    navigate("/login");
-  };
-
   return (
     <div>
-      {/* Drawer Toggle Button */}
       <button
         onClick={toggleDrawer}
         className="lg:hidden fixed top-4 left-4 z-50 text-white"
@@ -36,7 +33,6 @@ const Sidebar = () => {
         <RiMenuLine size={24} />
       </button>
 
-      {/* Sidebar Container */}
       <div
         className={`fixed lg:static top-0 left-0 w-[260px] bg-[#001229] transition-transform py-4 px-2 flex flex-col justify-start items-left pl-8 duration-300 shadow-lg p-6 border-b  border-r border-gray-700 text-white items-center hover:bg-[#001229] ${
           isDrawerOpen ? "translate-x-0" : "-translate-x-full"
@@ -55,11 +51,7 @@ const Sidebar = () => {
             />
           ))}
           <button
-            // onClick={() => {
-            //   navigate("/login", "Home");
-            //   handleCloseDrawer();
-            // }}
-            onClick={() => handleLogout()}
+            onClick={() => toggleLogoutModal()}
             className={`w-full h-[46px] outline-none rounded-[12px] 
             bg-transparent text-white/50 
             font-medium flex items-center justify-start transition-all duration-500 hover:bg-gradient-to-r from-[#EF1C68] to-gray-900 hover:text-white px-3 gap-2`}
@@ -72,13 +64,13 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Overlay when drawer is open */}
       {isDrawerOpen && (
         <div
           onClick={toggleDrawer}
           className="fixed inset-0 bg-black opacity-50 lg:hidden z-30"
         ></div>
       )}
+      {showLogoutModal && <LogoutModal onclose={toggleLogoutModal} />}
     </div>
   );
 };

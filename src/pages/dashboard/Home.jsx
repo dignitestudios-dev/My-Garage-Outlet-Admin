@@ -7,10 +7,10 @@ import Cookies from "js-cookie";
 import Loader from "../../components/global/Loader";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [data, setData] = useState(null);
-  console.log("data >>", data);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -23,9 +23,10 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("home data >>>", res?.data);
+      // console.log("home data >>>", res?.data);
       setData(res?.data);
     } catch (error) {
+      toast.error("Semething went wrong");
       setError(true);
       console.log(error);
     } finally {

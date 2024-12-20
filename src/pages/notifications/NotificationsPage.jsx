@@ -77,7 +77,7 @@ const NotificationsPage = () => {
           },
         }
       );
-      console.log("Notification created:", response?.data);
+      // console.log("Notification created:", response?.data);
       if (response?.data?.success) {
         toast.success(response?.data?.message);
         fetchNotifications();

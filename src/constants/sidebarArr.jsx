@@ -7,12 +7,6 @@ import { GoReport } from "react-icons/go";
 import { MdOutlineUnsubscribe } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 
-
-
-
-
-
-
 export const sidebarArr = [
   {
     title: "Home",
@@ -52,7 +46,6 @@ export const sidebarArr = [
   {
     title: "Settings",
     url: "/settings",
-    icon: <IoSettingsOutline   />,
+    icon: <IoSettingsOutline />,
   },
-
 ];

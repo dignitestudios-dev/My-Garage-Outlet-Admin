@@ -3,22 +3,19 @@ import React, { useState } from "react";
 const DeleteConfirmationModal = ({ isOpen, onClose, onConfirmDelete }) => {
   if (!isOpen) return null;
 
-  // State to hold the reason for deletion
   const [reason, setReason] = useState("");
 
-  // Handle reason input change
   const handleInputChange = (e) => {
     setReason(e.target.value);
   };
 
-  // Confirm delete with reason
   const handleConfirm = () => {
     if (!reason) {
       alert("Please provide a reason for deletion.");
       return;
     }
-    onConfirmDelete(); // Pass reason to the parent function
-    setReason(""); // Reset reason after confirming
+    onConfirmDelete();
+    setReason("");
     // onClose(); // Close modal after confirming
   };
 

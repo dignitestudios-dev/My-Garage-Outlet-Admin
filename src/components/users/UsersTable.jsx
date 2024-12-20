@@ -25,6 +25,7 @@ const UsersTable = () => {
   const fetchUsers = async () => {
     const token = Cookies.get("token");
     setLoading(true);
+
     try {
       const res = await axios.get(
         `${BASE_URL}/admin/user/viewAllUsers?search=&time=${dateFilter}&page=${page}&limit=10`,
@@ -34,6 +35,7 @@ const UsersTable = () => {
           },
         }
       );
+      console.log(res?.data?.data);
       setFilteredUsers(res?.data?.data);
       setPagination(res?.data?.pagination);
     } catch (error) {
@@ -51,7 +53,19 @@ const UsersTable = () => {
     if (searchTerm === "") {
       setFilteredUsers(filteredUsers);
     } else {
-      setFilteredUsers(filterUsers());
+      setFilteredUsers(filteredUsers);
+    }
+  }, [searchTerm, filteredUsers]);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredUsers(filteredUsers);
+    } else {
+      setFilteredUsers(
+        filteredUsers.filter((user) =>
+          user.name.toLowerCase().includes(searchTerm)
+        )
+      );
     }
   }, [searchTerm, filteredUsers]);
 
@@ -82,20 +96,22 @@ const UsersTable = () => {
     navigate(`/user-info/${userId}`);
   };
 
-  const handleDelete = async (userId) => {
+  const handleDelete = async () => {
     const token = Cookies.get("token");
     try {
       await axios.delete(
-        `${BASE_URL}/admin/user/deleteUser/${Array.from(selectedUsers)[0]}`,
+        `${BASE_URL}/admin/user/deleteSingleUser/${
+          Array.from(selectedUsers)[0]
+        }`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      // Re-fetch or filter out the deleted user
       toast.success("User deleted successfully");
       fetchUsers();
+      setShowModal(false);
     } catch (error) {
       console.log("Error deleting user", error?.response?.data);
       toast.error("An error occurred while deleting user");
@@ -128,9 +144,9 @@ const UsersTable = () => {
 
   const handleDeleteUsers = async () => {
     if (Array.from(selectedUsers)?.length > 1) {
-      await handleDelete();
-    } else {
       await handleBulkDelete();
+    } else {
+      await handleDelete();
     }
   };
 
@@ -168,7 +184,7 @@ const UsersTable = () => {
 
       {/* Filter Buttons */}
       <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
-        {["all", "recent", "lastMonth", "thisWeek", "thisYear"].map(
+        {["all", "recently joined", "last month", "this week", "this year"].map(
           (filterValue) => (
             <button
               key={filterValue}
@@ -181,6 +197,8 @@ const UsersTable = () => {
             >
               {filterValue === "all"
                 ? "All"
+                : filterValue === "recently joined"
+                ? "Recent"
                 : filterValue
                     .replace(/([a-z])([A-Z])/g, "$1 $2")
                     .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())}

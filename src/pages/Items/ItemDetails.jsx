@@ -9,6 +9,7 @@ import {
   useFetchItemQuery,
 } from "../../features/itemSlice/itemSlice";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import { toast } from "react-toastify";
 
 const mockItemDetails = {
   id: "E001",
@@ -29,7 +30,6 @@ const mockItemDetails = {
 
 const ItemDetails = () => {
   const { id } = useParams();
-  //   console.log(id);
   const { data } = useFetchItemQuery({ itemId: id });
   const [
     deleteItem,
@@ -52,11 +52,12 @@ const ItemDetails = () => {
   const handleDelete = async (reason) => {
     try {
       await deleteItem({ itemId: id, reason }).unwrap();
-      console.log("Item deleted successfully!");
+      toast.success("Item deleted successfully!");
       toggleDeleteModal();
       navigate("/items");
     } catch (err) {
       console.error("Error deleting item:", err);
+      toast.error("An error occurred while deleting item");
       toggleDeleteModal();
     }
   };

@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { GoDotFill } from "react-icons/go";
 import { GlobalContext } from "../contexts/GlobalContext";
 import Cookies from "js-cookie";
 
@@ -36,15 +35,9 @@ const Navbar = () => {
           <div className="w-auto flex flex-col justify-start items-start">
             <p
               className="text-[11px] font-normal text-white hover:text-white transition-all"
-              onClick={() => navigate("/profile", "Profile")}
+              onClick={() => navigate("/settings", "settings")}
             >
               {admin?.name}
-            </p>
-            <p
-              className="text-[11px] font-medium text-white hover:text-[#EF1C68] transition-all"
-              onClick={() => navigate("/settings", "Profile")}
-            >
-              {admin?.email}
             </p>
           </div>
         </button>

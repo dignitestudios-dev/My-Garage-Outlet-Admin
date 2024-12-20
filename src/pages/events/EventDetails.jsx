@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EditEventModal from "../../components/events/EditEventModal";
 import DeleteEventModal from "../../components/events/DeleteEventModal";
 import {
@@ -7,23 +7,18 @@ import {
   FaRetweet,
   FaComment,
   FaShare,
-  FaCheckCircle,
-  FaQuestionCircle,
   FaCalendarAlt,
   FaClock,
   FaMapMarkerAlt,
   FaUsers,
 } from "react-icons/fa";
-import {
-  useDeleteEventMutation,
-  useFetchEventQuery,
-} from "../../features/eventSlice/eventSlice";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import { useGetUsersQuery } from "../../features/userSlice/userSlice";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../api/api";
+import EventParticipants from "./EventParticipants";
+import Loader from "../../components/global/Loader";
 
 const mockEventDetails = {
   id: "E001",
@@ -68,24 +63,20 @@ const mockEventDetails = {
 
 const EventDetails = () => {
   const { id } = useParams();
-  const {
-    data: eventData,
-    isLoading: isFetchingEvent,
-    error: fetchEventError,
-  } = useFetchEventQuery({ eventId: id });
   const { navigate } = useContext(GlobalContext);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("eventDetails");
-  const [activeStatusTab, setActiveStatusTab] = useState("joined");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [event, setEvent] = useState(null);
   const [deletionReason, setDeletionReason] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleFetchEvent = async () => {
     const token = Cookies.get("token");
+    setLoading(true);
     try {
       const res = await axios.get(
         `${BASE_URL}/admin/event/viewEventDetails/${id}`,
@@ -95,10 +86,12 @@ const EventDetails = () => {
           },
         }
       );
-      console.log("eventdata >>", res?.data?.data);
+      // console.log("eventdata >>", res?.data?.data);
       setEvent(res?.data?.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,11 +99,8 @@ const EventDetails = () => {
     handleFetchEvent();
   }, []);
 
-  if (isFetchingEvent) {
-    return <h2>Loading...</h2>;
-  }
-  if (fetchEventError) {
-    return <h2>Something went wrong</h2>;
+  if (loading) {
+    return <Loader />;
   }
 
   const toggleEditModal = () => setIsEditModalOpen(!isEditModalOpen);
@@ -119,7 +109,6 @@ const EventDetails = () => {
   };
 
   const handleSave = () => {
-    console.log("Event details saved!");
     toggleEditModal();
   };
 
@@ -152,16 +141,6 @@ const EventDetails = () => {
       setDeleting(false);
     }
   };
-
-  const filteredParticipants = mockEventDetails.participants.filter(
-    (participant) => {
-      const matchesStatus = participant.status === activeStatusTab;
-      const matchesSearch =
-        participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        participant.email.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesStatus && matchesSearch;
-    }
-  );
 
   const goToNextImage = () => {
     setCurrentImageIndex(
@@ -226,8 +205,14 @@ const EventDetails = () => {
           </button>
         </div>
 
-        {/* Event Details Tab */}
-        {activeTab === "eventDetails" && (
+        {/* Participants Tab */}
+        {activeTab === "participants" ? (
+          <EventParticipants
+            filteredParticipants={event?.participants}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        ) : (
           <div className="p-6 bg-gray-900 rounded-lg shadow-lg">
             {/* Event Title and Description */}
             <h2 className="text-5xl font-bold text-[#EF1C68] mb-4">
@@ -307,90 +292,6 @@ const EventDetails = () => {
               </button>
             </div>
           </div>
-        )}
-
-        {/* Participants Tab */}
-        {activeTab === "participants" && event?.participants?.length > 0 ? (
-          <div className="w-full bg-[#001229] text-gray-200 p-6 rounded-lg shadow-md">
-            {/* Status Tabs for Joined/Maybe */}
-            <div className="flex justify-start mb-4 space-x-4">
-              <button
-                className={`flex items-center rounded-full py-2 px-4 text-sm font-semibold ${
-                  activeStatusTab === "joined"
-                    ? "bg-[#EF1C68] text-white"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                }`}
-                onClick={() => setActiveStatusTab("joined")}
-              >
-                Joined
-              </button>
-              <button
-                className={`flex items-center rounded-full py-2py-1 px-4 text-sm font-semibold ${
-                  activeStatusTab === "maybe"
-                    ? "bg-[#EF1C68] text-white"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                }`}
-                onClick={() => setActiveStatusTab("maybe")}
-              >
-                Maybe
-              </button>
-            </div>
-
-            {/* Search Bar */}
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Search participants by name or email..."
-                className="w-full px-4 py-2 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-[#EF1C68]"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            {/* Participant Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {filteredParticipants.length > 0 ? (
-                filteredParticipants.map((participant) => (
-                  <div
-                    key={participant.id}
-                    className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-                  >
-                    <div className="flex items-center mb-4">
-                      <img
-                        src={participant.profilePic}
-                        alt={participant.name}
-                        className="w-16 h-16 rounded-full object-cover mr-4"
-                      />
-                      <div>
-                        <h3 className="text-lg font-semibold">
-                          {participant.name}
-                        </h3>
-                        <p className="text-sm text-gray-400">
-                          {participant.email}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Status Indicator */}
-                    <div className="flex items-center space-x-2">
-                      {participant.status === "joined" ? (
-                        <FaCheckCircle className="text-green-500" />
-                      ) : (
-                        <FaQuestionCircle className="text-yellow-500" />
-                      )}
-                      <span className="text-sm text-gray-400">
-                        {participant.status === "joined" ? "Joined" : "Maybe"}
-                      </span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-400">No participants found</p>
-              )}
-            </div>
-          </div>
-        ) : (
-          <h2>No Participants Found</h2>
         )}
       </div>
 

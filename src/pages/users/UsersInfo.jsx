@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import EditUserModal from "../../components/users/EditUserModal";
 import DeleteUserModal from "../../components/users/DeleteUserModal";
@@ -13,6 +13,9 @@ import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import Cookies from "js-cookie";
 import Loader from "../../components/global/Loader";
+import { toast } from "react-toastify";
+import moment from "moment";
+import opencage from "opencage-api-client";
 
 const mockEventHistory = [
   {
@@ -38,12 +41,6 @@ const mockEventHistory = [
   },
 ];
 
-const mockItemList = [
-  { id: "I001", name: "Luxury Yacht", price: "$5000", sold: false },
-  { id: "I002", name: "Jet Ski", price: "$1500", sold: true },
-  { id: "I003", name: "Speed Boat", price: "$3000", sold: false },
-];
-
 const UsersInfo = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -57,7 +54,14 @@ const UsersInfo = () => {
     userId: id,
     eventType: "all",
   });
-  console.log("userInfo >>>", data);
+  console.log(data?.data);
+  const DateFormat = () => {
+    const formattedDate = moment().format("YYYY-MM-DD");
+
+    return formattedDate;
+  };
+  console.log(DateFormat());
+
   const [
     suspendUser,
     { isLoading: suspendLoading, isSuccess, isError, error: suspendError },
@@ -76,29 +80,35 @@ const UsersInfo = () => {
 
   const handleSuspend = async () => {
     const token = Cookies.get("token");
+    console.log(token);
     const url = data?.data?.isLocked
       ? `${BASE_URL}/admin/user/toggleLockUserAccount/${id}/false`
       : `${BASE_URL}/admin/user/toggleLockUserAccount/${id}/true`;
 
-    const params = data?.data?.isLocked
-      ? { suspensionReason }
-      : { suspensionReason };
+    // const params = data?.data?.isLocked
+    //   ? { suspensionReason }
+    //   : { suspensionReason };
 
     try {
-      const res = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: params,
-      });
+      const res = await axios.get(
+        url,
+        // { suspensionReason },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("suspension res >>>", res);
+      toast.message(res?.data?.message);
       // await suspendUser({ userId: id }).unwrap();
       // console.log("User suspended successfully!");
       // toggleSuspendModal();
       // refetch();
       // navigate("/");
     } catch (err) {
-      console.error("Error suspending user:", err?.response?.data);
+      toast.error(err?.response?.data?.message);
+      console.error("Error suspending user:", err);
       toggleSuspendModal();
     }
   };
@@ -125,7 +135,7 @@ const UsersInfo = () => {
   };
 
   const goToEventDetails = (eventId) => {
-    navigate(`/event-details/1`);
+    navigate(`/event-details/${eventId}`);
   };
 
   const goToItemDetails = (itemId) => {
@@ -135,11 +145,6 @@ const UsersInfo = () => {
   const handleEventFilterChange = (e) => {
     setEventFilter(e.target.value);
   };
-
-  const filteredEvents = mockEventHistory.filter((event) => {
-    if (eventFilter === "All") return true;
-    return event.status === eventFilter;
-  });
 
   return (
     <div className="w-full h-full bg-[#001229] p-8 text-white overflow-auto">
@@ -230,6 +235,7 @@ const UsersInfo = () => {
                   <th className="px-6 py-3 text-left">Event Name</th>
                   <th className="px-6 py-3 text-left">Date</th>
                   <th className="px-6 py-3 text-left">Status</th>
+                  <th className="px-6 py-3 text-left">Type</th>
                   <th className="px-6 py-3 text-left">Actions</th>
                 </tr>
               </thead>
@@ -239,12 +245,13 @@ const UsersInfo = () => {
                     <td className="px-6 py-4">{event?.title}</td>
                     <td className="px-6 py-4">{event?.date}</td>
                     <td className="px-6 py-4">
-                      {event?.status ? "Completed" : "Upcoming"}
+                      {DateFormat() > event?.date ? "Completed" : "Upcoming"}
                     </td>
+                    <td className="px-6 py-4">{event?.date}</td>
                     <td className="px-6 py-4">
                       <button
                         className="text-[#EF1C68] hover:text-[#E01C56] transition"
-                        onClick={() => goToEventDetails(event.eventID)}
+                        onClick={() => goToEventDetails(event?.eventID)}
                       >
                         View Details
                       </button>

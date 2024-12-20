@@ -12,9 +12,9 @@ import { toast } from "react-toastify";
 const ReportsTable = () => {
   const [selectedReports, setSelectedReports] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
-  const [reportType, setReportType] = useState("");
+  const [reportType, setReportType] = useState("all");
   const [filteredReports, setFilteredReports] = useState([]);
-  const [pagination, setPagination] = useState({});
+  const [pagination, setPagination] = useState(null);
   const [page, setPage] = useState(1);
   const token = Cookies.get("token");
   const navigate = useNavigate();
@@ -130,7 +130,7 @@ const ReportsTable = () => {
             onChange={(e) => setReportType(e.target.value)}
             className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl w-md p-2 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
           >
-            <option value="" className="bg-gray-800 text-white">
+            <option value="all" className="bg-gray-800 text-white">
               All Types
             </option>
             <option value="user" className="bg-gray-800 text-white">
@@ -224,7 +224,7 @@ const ReportsTable = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     <button
                       className="text-white mr-2"
-                      onClick={() => handleEdit(report?.id, report)}
+                      onClick={() => handleEdit(report?.reportID, report)}
                     >
                       <AiFillEdit size={18} />
                     </button>
@@ -256,7 +256,10 @@ const ReportsTable = () => {
         </span>
         <button
           onClick={() => setPage(page + 1)}
-          disabled={pagination?.currentPage === pagination?.totalPages}
+          disabled={
+            pagination?.currentPage === pagination?.totalPages ||
+            pagination?.totalPages === 0
+          }
           className="px-4 py-2 bg-gray-800 text-white font-semibold rounded-full hover:bg-gray-700 transition disabled:opacity-50"
         >
           Next
