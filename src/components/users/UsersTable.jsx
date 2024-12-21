@@ -16,12 +16,12 @@ const UsersTable = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
-  const [filter, setFilter] = useState("all");
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dateFilter, setDateFilter] = useState("all");
+
   const fetchUsers = async () => {
     const token = Cookies.get("token");
     setLoading(true);
@@ -244,6 +244,9 @@ const UsersTable = () => {
                       Subscriber
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Account Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       Edit
                     </th>
                   </tr>
@@ -293,6 +296,18 @@ const UsersTable = () => {
                           {user?.isSubscriptionPaid
                             ? "Subscribed"
                             : "Unsubscribed"}
+                        </span>
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            user?.isLocked
+                              ? "bg-red-800 text-red-100"
+                              : "bg-green-800 text-green-100"
+                          }`}
+                        >
+                          {user?.isLocked ? "Suspended" : "Active"}
                         </span>
                       </td>
 

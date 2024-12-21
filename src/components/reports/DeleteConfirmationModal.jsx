@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-const DeleteConfirmationModal = ({ isOpen, onClose, onConfirmDelete }) => {
+const DeleteConfirmationModal = ({
+  isOpen,
+  onClose,
+  onConfirmDelete,
+  deleting,
+}) => {
   if (!isOpen) return null;
 
   const [reason, setReason] = useState("");
@@ -53,7 +58,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirmDelete }) => {
             className="bg-red-800 text-gray-200 px-5 py-2 rounded-md hover:bg-red-900 border border-gray-700 transition-colors"
             onClick={handleConfirm} // Confirm deletion with reason
           >
-            Delete
+            {deleting ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>

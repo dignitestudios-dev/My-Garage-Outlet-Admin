@@ -20,6 +20,7 @@ const ReportsTable = () => {
   const token = Cookies.get("token");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchReports = async () => {
     setLoading(true);
@@ -59,7 +60,7 @@ const ReportsTable = () => {
     if (selectedReports.size === filteredReports.length) {
       setSelectedReports(new Set());
     } else {
-      const allReportIds = filteredReports.map((report) => report.id);
+      const allReportIds = filteredReports.map((report) => report?.reportID);
       setSelectedReports(new Set(allReportIds));
     }
   };
@@ -71,6 +72,7 @@ const ReportsTable = () => {
   };
 
   const handleDelete = async (reportId) => {
+    setDeleting(true);
     try {
       await axios.delete(
         `${BASE_URL}/admin/report/deleteSingleReport/${reportId}`,
@@ -85,11 +87,14 @@ const ReportsTable = () => {
     } catch (error) {
       toast.error("Error deleting report");
       console.log("Error deleting report:", error);
+    } finally {
+      setDeleting(false);
     }
   };
 
   const handleBulkDelete = async () => {
     const reportIdsToDelete = Array.from(selectedReports);
+    setDeleting(true);
     try {
       await axios.post(
         `${BASE_URL}/admin/report/deleteMultipleReports`,
@@ -107,14 +112,18 @@ const ReportsTable = () => {
     } catch (error) {
       toast.error("Error deleting reports");
       console.log("Error deleting reports:", error);
+    } finally {
+      setDeleting(false);
     }
   };
 
   const handleDeleteReports = async () => {
     if (selectedReports.size === 1) {
       await handleDelete(Array.from(selectedReports)[0]);
+      setShowModal(false);
     } else {
       await handleBulkDelete();
+      setShowModal(false);
     }
   };
 
@@ -181,6 +190,7 @@ const ReportsTable = () => {
                       <input
                         type="checkbox"
                         checked={
+                          filteredReports.length > 1 &&
                           selectedReports.size === filteredReports.length
                         }
                         onChange={toggleSelectAll}
@@ -211,6 +221,12 @@ const ReportsTable = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
+                        {/* <input
+                          type="checkbox"
+                          checked={selectedReports.has(report?.reportID)}
+                          onChange={() => toggleSelectReport(report?.reportID)}
+                          className="form-checkbox text-blue-600"
+                        /> */}
                         <input
                           type="checkbox"
                           checked={selectedReports.has(report?.reportID)}
@@ -284,6 +300,7 @@ const ReportsTable = () => {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onConfirmDelete={handleDeleteReports}
+        deleting={deleting}
       />
     </motion.div>
   );
