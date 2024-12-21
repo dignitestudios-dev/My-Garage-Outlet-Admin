@@ -34,10 +34,9 @@ const EventsTable = () => {
   const fetchEvents = async () => {
     const token = Cookies.get("token");
     setLoading(true);
-
     try {
       const res = await axios.get(
-        `${BASE_URL}/admin/event/viewAllEvents?search=&page=${currentPage}&limit=10`,
+        `${BASE_URL}/admin/event/viewAllEvents?search=&time=${dateFilter}&page=${currentPage}&limit=10`,
         {
           // params: {
           //   time: dateFilter,
@@ -122,7 +121,7 @@ const EventsTable = () => {
 
       {/* Filter buttons */}
       <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
-        {["all", "recently joined", "last month", "this week", "this year"].map(
+        {["all", "recently joined", "this week", "last month", "this year"].map(
           (filterValue) => (
             <button
               key={filterValue}

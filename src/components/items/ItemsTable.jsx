@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import Loader from "../global/Loader";
+import { toast } from "react-toastify";
 
 const ItemsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,6 +40,7 @@ const ItemsTable = () => {
       setPagination(res?.data?.pagination);
     } catch (error) {
       console.log("Error while fetching items >>>", error?.response?.data);
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -52,7 +54,6 @@ const ItemsTable = () => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    // Filter based on search term and date range
     const filtered = allItems.filter(
       (item) =>
         item.title.toLowerCase().includes(term) ||
@@ -109,8 +110,8 @@ const ItemsTable = () => {
         {[
           "all",
           "recently created",
-          "last month",
           "this week",
+          "last month",
           "this year",
         ].map((filterValue) => (
           <button

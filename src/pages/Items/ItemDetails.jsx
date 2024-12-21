@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaHeart, FaRetweet, FaComment, FaFilePdf } from "react-icons/fa"; // Added PDF icon
 import EditItemModal from "../../components/items/EditItemModal";
@@ -10,6 +10,9 @@ import {
 } from "../../features/itemSlice/itemSlice";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../api/api";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const mockItemDetails = {
   id: "E001",
@@ -30,11 +33,7 @@ const mockItemDetails = {
 
 const ItemDetails = () => {
   const { id } = useParams();
-  const { data } = useFetchItemQuery({ itemId: id });
-  const [
-    deleteItem,
-    { isLoading: isDeletingItem, isSuccess, error: deleteItemError },
-  ] = useDeleteItemMutation();
+
   const { navigate } = useContext(GlobalContext);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -43,6 +42,33 @@ const ItemDetails = () => {
 
   const toggleEditModal = () => setIsEditModalOpen(!isEditModalOpen);
   const toggleDeleteModal = () => setIsDeleteModalOpen(!isDeleteModalOpen);
+  const [loading, setLoading] = useState(false);
+  const [eventDetails, setEventDetails] = useState(null);
+  const [isDeletingItem, setIsDeleting] = useState(false);
+
+  const fetchItemsDetails = async () => {
+    const token = Cookies.get("token");
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/admin/item/viewItemDetails/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setEventDetails(res?.data?.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItemsDetails();
+  }, []);
 
   const handleSave = () => {
     console.log("Item details saved!");
@@ -50,15 +76,31 @@ const ItemDetails = () => {
   };
 
   const handleDelete = async (reason) => {
+    const token = Cookies.get("token");
+    setIsDeleting(true);
     try {
-      await deleteItem({ itemId: id, reason }).unwrap();
-      toast.success("Item deleted successfully!");
+      const res = await axios.post(
+        `${BASE_URL}/admin/item/deleteSingleItem/${id}`,
+        {
+          reason,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success(res?.data?.message);
       toggleDeleteModal();
       navigate("/items");
     } catch (err) {
       console.error("Error deleting item:", err);
-      toast.error("An error occurred while deleting item");
+      toast.error(
+        err?.response?.data?.message || "An error occurred while deleting item"
+      );
       toggleDeleteModal();
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -83,8 +125,8 @@ const ItemDetails = () => {
         <div className="relative w-full">
           <div className="relative w-full h-72">
             <img
-              src={data?.data?.picture}
-              alt={mockItemDetails.title}
+              src={eventDetails?.picture}
+              alt={eventDetails?.title}
               className="w-full h-full object-contain rounded-t-lg"
             />
           </div>
@@ -107,40 +149,40 @@ const ItemDetails = () => {
         {/* Item Details Section */}
         <div className="p-6 space-y-6 ">
           <h2 className="text-3xl md:text-4xl font-semibold text-white ">
-            {data?.data?.title}
+            {eventDetails?.title}
           </h2>
           <p className="text-lg md:text-xl text-gray-400">
-            {data?.data?.description}
+            {eventDetails?.description}
           </p>
 
           <div className="space-y-4">
             {/* Location, City, and Zipcode */}
             <div className="text-lg text-gray-300">
               <strong className="text-gray-500">Location:</strong>{" "}
-              {data?.data?.city}
+              {eventDetails?.city}
             </div>
             <div className="text-lg text-gray-300">
-              <strong className="text-gray-500">Geolocation:</strong> Lat:{" "}
-              {data?.data?.latitude}, Lon: {data?.data?.longitude}
+              <strong className="text-gray-500">Geolocation:</strong>{" "}
+              {eventDetails?.address}
             </div>
           </div>
 
           <div className="bg-gray-900 p-4 rounded-lg flex justify-between items-center text-gray-300">
             <div className="flex items-center space-x-2">
               <FaHeart className="text-red-500" />
-              <span>{data?.data?.likeCount} Likes</span>
+              <span>{eventDetails?.likeCount} Likes</span>
             </div>
             <div className="flex items-center space-x-2">
               <FaRetweet className="text-green-500" />
-              <span>{data?.data?.repostCount} Reposts</span>
+              <span>{eventDetails?.repostCount} Reposts</span>
             </div>
             <div className="flex items-center space-x-2">
               <FaComment className="text-blue-500" />
-              <span>{data?.data?.commentCount} Comments</span>
+              <span>{eventDetails?.commentCount} Comments</span>
             </div>
             <div className="flex items-center space-x-2">
               <FaShare className="text-orange-500" />
-              <span>{data?.data?.shareCount} Shares</span>
+              <span>{eventDetails?.shareCount} Shares</span>
             </div>
           </div>
 

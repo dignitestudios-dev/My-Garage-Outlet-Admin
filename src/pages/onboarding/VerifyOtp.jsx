@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { login } from "../../assets/export";
 import AuthSubmitBtn from "../../components/onboarding/AuthSubmitBtn";
 import { GlobalContext } from "../../contexts/GlobalContext";
@@ -14,20 +14,19 @@ const VerifyOtp = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const { navigate } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
-
+  const [timer, setTimer] = useState(60); // Timer state for 60 seconds
+  const [isResendDisabled, setIsResendDisabled] = useState(false); // State to disable resend OTP button
   const inputRefs = useRef([]);
   inputRefs.current = [];
 
   const handleChange = (e, index) => {
     const value = e.target.value;
 
-    // Handle valid digits (0-9)
     if (/^[0-9]$/.test(value)) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
 
-      // Move to the next input field if not the last one
       if (index < otp.length - 1) {
         inputRefs.current[index + 1].focus();
       }
@@ -37,25 +36,23 @@ const VerifyOtp = () => {
   const handlePaste = (e) => {
     const pastedValue = e.clipboardData.getData("Text");
 
-    // Ensure the pasted value is exactly 4 digits
     if (/^\d{4}$/.test(pastedValue)) {
-      setOtp(pastedValue.split("")); // Split string into an array
+      setOtp(pastedValue.split(""));
     }
   };
 
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       if (otp[index] !== "") {
-        // If there is a value in the input, remove it
         const newOtp = [...otp];
         newOtp[index] = "";
         setOtp(newOtp);
       } else if (index > 0) {
-        // If the current input is empty and backspace is pressed, move focus to the previous field
         inputRefs.current[index - 1].focus();
       }
     }
   };
+
   const generateDeviceId = () => {
     const rawId = `${navigator.userAgent}-${navigator.platform}-${navigator.language}`;
     return CryptoJS.MD5(rawId).toString();
@@ -113,11 +110,28 @@ const VerifyOtp = () => {
       console.log("resent otp res >>>", res?.data);
       if (res?.data?.success) {
         toast.success("OTP sent successfully");
+        // Start or reset the timer when OTP is resent
+        setIsResendDisabled(true);
+        setTimer(60); // Reset timer to 60 seconds
       }
     } catch (error) {
       console.log("err while resent otp >>>", error);
     }
   };
+
+  // Timer effect
+  useEffect(() => {
+    if (timer === 0) {
+      setIsResendDisabled(false); // Enable the button after 60 seconds
+    }
+    if (isResendDisabled && timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1); // Decrement the timer
+      }, 1000);
+
+      return () => clearInterval(interval); // Cleanup the interval on unmount or when timer reaches 0
+    }
+  }, [timer, isResendDisabled]);
 
   const arr = [1, 2, 3, 4];
 
@@ -178,8 +192,9 @@ const VerifyOtp = () => {
               type="button"
               onClick={() => handleResentOtp()}
               className="outline-none text-[13px] border-none text-[#EF1C68] font-bold"
+              disabled={isResendDisabled}
             >
-              Resend now
+              {isResendDisabled ? `Resend in ${timer}s` : "Resend now"}
             </button>
           </div>
         </div>
