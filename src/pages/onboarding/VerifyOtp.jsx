@@ -14,8 +14,7 @@ const VerifyOtp = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const { navigate } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(60); // Timer state for 60 seconds
-  const [isResendDisabled, setIsResendDisabled] = useState(false); // State to disable resend OTP button
+  const [timer, setTimer] = useState(60);
   const inputRefs = useRef([]);
   inputRefs.current = [];
 
@@ -91,6 +90,13 @@ const VerifyOtp = () => {
     }
   };
 
+  const [counter, setCounter] = useState(60);
+  useEffect(() => {
+    const timer =
+      counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+    return () => clearInterval(timer);
+  }, [counter]);
+
   const handleResentOtp = async () => {
     try {
       const id = generateDeviceId();
@@ -110,28 +116,12 @@ const VerifyOtp = () => {
       console.log("resent otp res >>>", res?.data);
       if (res?.data?.success) {
         toast.success("OTP sent successfully");
-        // Start or reset the timer when OTP is resent
-        setIsResendDisabled(true);
-        setTimer(60); // Reset timer to 60 seconds
+        setCounter(60);
       }
     } catch (error) {
       console.log("err while resent otp >>>", error);
     }
   };
-
-  // Timer effect
-  useEffect(() => {
-    if (timer === 0) {
-      setIsResendDisabled(false); // Enable the button after 60 seconds
-    }
-    if (isResendDisabled && timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prev) => prev - 1); // Decrement the timer
-      }, 1000);
-
-      return () => clearInterval(interval); // Cleanup the interval on unmount or when timer reaches 0
-    }
-  }, [timer, isResendDisabled]);
 
   const arr = [1, 2, 3, 4];
 
@@ -165,8 +155,8 @@ const VerifyOtp = () => {
               value={otp[index]}
               onChange={(e) => handleChange(e, index)}
               onPaste={handlePaste}
-              onKeyDown={(e) => handleKeyDown(e, index)} // Add keydown handler
-              ref={(el) => (inputRefs.current[index] = el)} // Assign ref to input
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              ref={(el) => (inputRefs.current[index] = el)}
               className="w-16 h-16 rounded-lg bg-transparent outline-none text-center border-[1px] border-[#EF1C68] text-[#EF1C68] text-2xl focus-within:border-[#EF1C68] flex items-center justify-center appearance-none otpInput"
               min="0"
               step="1"
@@ -191,10 +181,10 @@ const VerifyOtp = () => {
             <button
               type="button"
               onClick={() => handleResentOtp()}
-              className="outline-none text-[13px] border-none text-[#EF1C68] font-bold"
-              disabled={isResendDisabled}
+              className="outline-none text-[13px] border-none text-[#EF1C68] font-bold disabled:cursor-not-allowed"
+              disabled={counter > 0}
             >
-              {isResendDisabled ? `Resend in ${timer}s` : "Resend now"}
+              {counter > 0 ? `Resend in ${counter}s` : "Resend now"}
             </button>
           </div>
         </div>

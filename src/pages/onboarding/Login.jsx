@@ -64,15 +64,16 @@ const Login = () => {
           resetForm();
         }
       } catch (error) {
+        console.log("login error >>>>", error);
         toast.error(error?.response?.data?.message);
         resetForm();
-        if (error.response) {
-          console.error("Error response data:", error.response.data);
-        } else if (error.request) {
-          console.error("Error request:", error.request);
-        } else {
-          console.error("Error message:", error.message);
-        }
+        // if (error.response) {
+        //   console.error("Error response data:", error.response.data);
+        // } else if (error.request) {
+        //   console.error("Error request:", error.request);
+        // } else {
+        //   console.error("Error message:", error.message);
+        // }
       } finally {
         setLoading(false);
       }
