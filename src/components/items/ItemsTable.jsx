@@ -72,13 +72,34 @@ const ItemsTable = () => {
     setSelectedItems(newSelectedItems);
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async (reason) => {
+    const token = Cookies.get("token");
     const remainingItems = allItems.filter(
       (item) => !selectedItems.has(item.itemID)
     );
-    setFilteredItems(remainingItems);
-    setSelectedItems(new Set());
-    setShowModal(false);
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/admin/item/deleteMultipleItems`,
+        {
+          itemIDs: Array.from(selectedItems), // Request body
+          reason: reason,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Authorization header
+          },
+        }
+      );
+      fetchItems();
+      setFilteredItems(remainingItems);
+      setSelectedItems(new Set());
+      setShowModal(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -105,7 +126,7 @@ const ItemsTable = () => {
         </div>
       </div>
 
-      {/* Date Filters */}
+      {/* {/ Date Filters /} */}
       <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
         {[
           "all",
@@ -134,7 +155,7 @@ const ItemsTable = () => {
         ))}
       </div>
 
-      {/* Delete Selected Items Button */}
+      {/* {/ Delete Selected Items Button /} */}
       {selectedItems.size > 0 && (
         <div className="mb-4 flex justify-end items-center">
           <button
@@ -147,7 +168,7 @@ const ItemsTable = () => {
         </div>
       )}
 
-      {/* Items Grid */}
+      {/* {/ Items Grid /} */}
       {loading ? (
         <Loader />
       ) : (
@@ -211,7 +232,7 @@ const ItemsTable = () => {
         </>
       )}
 
-      {/* Pagination */}
+      {/* {/ Pagination /} */}
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={() => setPage(page - 1)}
@@ -237,7 +258,7 @@ const ItemsTable = () => {
         </button>
       </div>
 
-      {/* Delete Confirmation Modal */}
+      {/* {/ Delete Confirmation Modal /} */}
       <DeleteConfirmationModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
@@ -248,3 +269,5 @@ const ItemsTable = () => {
 };
 
 export default ItemsTable;
+
+ItemsTable.jsx;

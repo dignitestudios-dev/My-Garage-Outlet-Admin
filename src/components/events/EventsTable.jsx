@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import Loader from "../global/Loader";
+import { body } from "framer-motion/client";
 
 const EventsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -76,13 +77,35 @@ const EventsTable = () => {
     }
   }, [searchTerm, filteredEvents]);
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async (reason) => {
+    const token = Cookies.get("token");
     const remainingEvents = filteredEvents.filter(
       (event) => !selectedEvents.has(event.id)
     );
-    setFilteredEvents(remainingEvents);
-    setShowModal(false);
-    setSelectedEvents(new Set());
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/admin/event/deleteMultipleEvents`,
+        {
+          eventIDs: Array.from(selectedEvents), // Request body
+          reason: reason,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Authorization header
+          },
+        }
+      );
+
+      fetchEvents();
+      setFilteredEvents(remainingEvents);
+      setShowModal(false);
+      setSelectedEvents(new Set());
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleSelectEvent = (id) => {
@@ -119,7 +142,6 @@ const EventsTable = () => {
         </div>
       </div>
 
-      {/* Filter buttons */}
       <div className="flex flex-wrap justify-start items-center gap-4 mb-4">
         {["all", "recently joined", "this week", "last month", "this year"].map(
           (filterValue) => (
@@ -156,7 +178,6 @@ const EventsTable = () => {
         </div>
       )}
 
-      {/* Events */}
       {loading ? (
         <Loader />
       ) : (
@@ -238,7 +259,6 @@ const EventsTable = () => {
         </>
       )}
 
-      {/* Pagination */}
       <div className="flex justify-between items-center mt-10">
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
@@ -269,3 +289,5 @@ const EventsTable = () => {
 };
 
 export default EventsTable;
+
+EventsTable.jsx;
