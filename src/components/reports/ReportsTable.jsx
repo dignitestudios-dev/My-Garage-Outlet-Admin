@@ -189,10 +189,7 @@ const ReportsTable = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       <input
                         type="checkbox"
-                        checked={
-                          filteredReports.length > 1 &&
-                          selectedReports.size === filteredReports.length
-                        }
+                        checked={selectedReports.size == filteredReports.length}
                         onChange={toggleSelectAll}
                         className="form-checkbox text-blue-600"
                       />
