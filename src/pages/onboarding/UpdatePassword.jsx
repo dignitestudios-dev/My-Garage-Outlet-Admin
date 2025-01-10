@@ -59,14 +59,14 @@ const UpdatePassword = () => {
           },
         }
       );
-      console.log("otp verification res >>>>", res);
+      // console.log("otp verification res >>>>", res);
       if (res?.data?.success) {
         toast.success(res?.data?.message);
         navigate("/login");
         Cookies.remove("adminEmail");
       }
     } catch (error) {
-      console.log("err while verifying otp >>>", error?.response?.data);
+      // console.log("err while verifying otp >>>", error?.response?.data);
       toast.error("An error occurred");
     } finally {
       setLoading(false);

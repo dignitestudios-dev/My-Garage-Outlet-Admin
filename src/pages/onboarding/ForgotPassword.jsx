@@ -41,13 +41,13 @@ const ForgotPassword = () => {
         }
       );
       Cookies.set("adminEmail", JSON.stringify(email));
-      console.log("email res >>>", res?.data);
+      // console.log("email res >>>", res?.data);
       if (res?.data?.success) {
         toast.success("OTP has been sent you email address");
         navigate("/verify-otp");
       }
     } catch (error) {
-      console.log("error while validating email >>>", error?.response?.data);
+      // console.log("error while validating email >>>", error?.response?.data);
       toast.error(error?.response?.data?.message);
     } finally {
       setLoading(false);

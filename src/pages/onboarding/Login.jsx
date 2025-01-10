@@ -52,6 +52,7 @@ const Login = () => {
             },
           }
         );
+
         if (res?.data?.success) {
           toast.success(res?.data?.message || "Login successful");
           Cookies.set("admin", JSON.stringify(res?.data?.data));
@@ -64,7 +65,7 @@ const Login = () => {
           resetForm();
         }
       } catch (error) {
-        console.log("login error >>>>", error);
+        // console.log("login error >>>>", error);
         toast.error(error?.response?.data?.message);
         resetForm();
         // if (error.response) {
