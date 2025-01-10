@@ -33,7 +33,7 @@ const ReportDetails = () => {
           },
         }
       );
-      // console.log("report details >>>", res?.data?.data);
+      console.log("report details >>>", res?.data?.data);
       setReportDetails(res?.data?.data);
     } catch (error) {
       // console.log("err while fetching report details >>>", error);
@@ -86,16 +86,16 @@ const ReportDetails = () => {
           <div className="space-y-6 mt-4">
             <div className="text-lg text-gray-300">
               <strong className="text-gray-500">Reported By:</strong>{" "}
-              {reportDetails?.creatorName}
+              {reportDetails?.reporterName}
             </div>
 
             <div className="flex items-center justify-between space-x-4 text-lg text-gray-300">
               <div>
                 <strong className="text-gray-500">Reported User:</strong>{" "}
-                {reportDetails?.reporterName}
+                {reportDetails?.reportedUserName}
               </div>
               {/* View Button as Link */}
-              {/* <Link
+              <Link
                 to={
                   reportDetails?.entityType === "user"
                     ? `/user-info/${reportDetails?.entityID}`
@@ -107,7 +107,7 @@ const ReportDetails = () => {
               >
                 <FaEye className="mr-2" />
                 View
-              </Link> */}
+              </Link>
             </div>
 
             <div className="text-lg text-gray-300">

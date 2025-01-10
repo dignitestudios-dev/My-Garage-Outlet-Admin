@@ -33,6 +33,7 @@ const ReportsTable = () => {
           },
         }
       );
+      console.log("reports >>>", res?.data);
       setFilteredReports(res?.data?.data);
       setPagination(res?.data?.pagination);
     } catch (error) {
@@ -236,6 +237,8 @@ const ReportsTable = () => {
                           ? "Comment"
                           : report?.type === "user"
                           ? "User"
+                          : report?.type === "item"
+                          ? "Item"
                           : "Event"}
                       </td>
 
